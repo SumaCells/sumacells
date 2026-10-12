@@ -1,0 +1,8 @@
+# SumaCells — robots.txt
+# Servido en la raíz del dominio (https://sumacells.com/robots.txt),
+# así que los buscadores lo leen directamente.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://sumacells.com/sitemap.xml

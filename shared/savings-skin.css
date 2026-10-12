@@ -1,0 +1,59 @@
+/* ============================================================
+   Reskin de SumaCells Savings → identidad navy + dorado de la suite.
+   Estrategia low-touch: remapea las variables propias de Savings
+   (--sky*, --fd, --fb) sin reescribir su markup. Reversible.
+   ============================================================ */
+:root{
+  --sky:#4a6dd1;
+  --sky-light:#eef1fb;
+  --sky-mid:#a9b8e6;
+  --sky-dark:#1a2b5e;
+  --sky-deep:#0f1d44;
+  --cream:#f8fafd;
+  --border:#dde3ea;
+  --sh:0 2px 12px rgba(26,60,94,.08);
+  --shm:0 4px 20px rgba(26,60,94,.12);
+  --shl:0 8px 36px rgba(26,60,94,.16);
+  /* tipografía de la suite (adiós Fraunces/Jakarta) */
+  --fd:'Segoe UI',system-ui,sans-serif;
+  --fb:'Segoe UI',system-ui,sans-serif;
+}
+body{background:#f4f6fb !important;font-family:'Segoe UI',system-ui,sans-serif !important}
+/* deja sitio a la barra de la suite (38px) y re-tematiza el fondo */
+#app{
+  background:linear-gradient(155deg,#f4f6fb 0%,#eef1fb 60%,#f4f6fb 100%) !important;
+  height:calc(100dvh - 38px) !important;
+}
+#app::before{background:linear-gradient(90deg,#1a2b5e,#4a6dd1,#1a2b5e) !important}
+/* logo: de serif itálico a Segoe con acento dorado, como el resto */
+/* ---- Homogeneizar con el look de Home/Payroll: cabecera navy + botones de la suite ---- */
+.topbar{
+  background:linear-gradient(120deg,#0f1d44 0%,#1a2b5e 55%,#2a3f80 100%) !important;
+  max-width:none !important; width:100% !important;
+  padding:0 1.25rem !important; height:56px !important;
+  box-shadow:0 2px 12px rgba(0,0,0,.22);
+}
+/* sin línea de degradado superior (las demás apps no la tienen) */
+#app::before{display:none !important}
+/* marca: logo (planeta de la suite) + nombre + versión, como Home/Payroll */
+.topbar-brand{display:flex;align-items:center;gap:10px;cursor:pointer}
+.brand-logo{width:34px;height:34px;flex-shrink:0;filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))}
+.brand-text{display:flex;flex-direction:column;line-height:1.15;font-family:'Segoe UI',system-ui,sans-serif}
+.brand-name{font-weight:800;letter-spacing:.02em;color:#fff;font-size:1.05rem}
+.brand-name .accent{color:#f5c84b}
+.brand-ver{font-size:.7rem;opacity:.75;font-weight:500;letter-spacing:.05em;color:#fff}
+/* botones del header (volver / idioma) al estilo navy de la suite */
+.back-btn,.lang-btn{
+  background:rgba(255,255,255,.10) !important;
+  border:1px solid rgba(255,255,255,.25) !important;
+  color:rgba(255,255,255,.85) !important;
+  border-radius:6px !important; box-shadow:none !important;
+}
+.back-btn:hover,.lang-btn:hover{background:rgba(255,255,255,.20) !important;color:#fff !important;border-color:rgba(255,255,255,.40) !important}
+.lang-btn.active{background:rgba(255,255,255,.28) !important;color:#fff !important;border-color:rgba(255,255,255,.45) !important}
+/* contenido centrado bajo la cabecera (como las páginas de la suite) */
+.milestones{max-width:680px !important;padding-top:.7rem !important}
+/* botones de acción: del estilo píldora al rectangular redondeado de la suite */
+.btn-primary{border-radius:10px !important;box-shadow:0 3px 12px rgba(26,60,94,.25) !important}
+.btn-primary:hover{box-shadow:0 5px 18px rgba(26,60,94,.32) !important}
+.btn-ghost{border-radius:10px !important}

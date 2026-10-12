@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadoras financieras gratis · SumaCells</title>
+<meta name="description" content="Suite de calculadoras financieras gratis para España: descubre a qué piso puedes aspirar, calcula tu sueldo neto e IRPF y haz crecer tus ahorros. Sin registro.">
+
+<!-- Favicon (planeta de la suite, SVG inline) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='30' r='15' fill='%23f5c84b'/%3E%3Cellipse cx='32' cy='34' rx='27' ry='9' fill='none' stroke='%237aa1ff' stroke-width='3' transform='rotate(-22 32 34)'/%3E%3C/svg%3E">
+
+<!-- Open Graph / previsualización en redes y mensajería -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SumaCells">
+<meta property="og:locale" content="es_ES">
+<meta property="og:title" content="Calculadoras financieras gratis · SumaCells">
+<meta property="og:description" content="Calcula tu sueldo neto, a qué casa puedes aspirar e invierte tus ahorros. Suite de herramientas financieras para España. Sin registro ni cookies.">
+<meta property="og:url" content="https://sumacells.com/">
+<meta property="og:image" content="https://sumacells.com/og.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="SumaCells — suite de calculadoras financieras">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Calculadoras financieras gratis · SumaCells">
+<meta name="twitter:description" content="Calcula tu sueldo neto, a qué casa puedes aspirar e invierte tus ahorros. Gratis y sin registro.">
+<meta name="twitter:image" content="https://sumacells.com/og.jpg">
+
+<link rel="canonical" href="https://sumacells.com/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="shared/tokens.css">
+<link rel="stylesheet" href="shared/base.css">
+<script src="shared/brand.js"></script>
+<script src="shared/header.js" defer></script>
+<script src="shared/analytics.js" defer></script>
+<style>
+  /* ---------- Piel "Evolución": franja navy + lista por preguntas ---------- */
+  body{background:var(--bg);-webkit-font-smoothing:antialiased}
+  .band{background:var(--topbar-gradient);color:#fff;padding:1.5rem 1.25rem 4.2rem;border-radius:0 0 28px 28px}
+  .band-in{max-width:720px;margin:0 auto}
+  .band .hero-title{font-weight:800;font-size:clamp(.9rem,3.7vw,1.5rem);line-height:1.2;letter-spacing:-.01em;color:#fff;margin:0;white-space:nowrap}
+  .band p{color:#c9d3ee;font-size:1rem;margin:0;max-width:520px}
+  .wrap{max-width:720px;margin:-3.2rem auto 0;padding:0 1rem 3rem;position:relative}
+
+  /* "Continúa donde lo dejaste" (solo si la persona pidió recordar sus datos) */
+  .continue{display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid var(--accent);border-radius:20px;
+    padding:14px 16px;margin-bottom:1rem;text-decoration:none;color:var(--text);box-shadow:var(--shadow)}
+  .continue .ct{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+  .continue small{font-size:.74rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8a6400}
+  .continue b{font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .continue .cv{font-size:1.2rem;font-weight:800;color:var(--primary);white-space:nowrap}
+  .continue:hover{box-shadow:var(--shadow-lg)}
+  .hidden{display:none!important}
+
+  .apps-section{background:#fff;border:1px solid #e3e8f1;border-radius:20px;box-shadow:var(--shadow);padding:.4rem 0;margin-bottom:1rem}
+  .sec-head{padding:.8rem 1.1rem .3rem}
+  .sec-head h2{display:flex;align-items:center;gap:8px;font-size:.9rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin:0}
+  .sec-head h2::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0}
+  .app-row{display:flex;align-items:center;gap:14px;padding:12px 1.1rem;min-height:64px;text-decoration:none;color:var(--text);
+    border-top:1px solid #eef1f6;transition:background .15s}
+  .sec-head + .app-row{border-top:none}
+  .app-row:hover{background:#f7f9fd}
+  .app-icon{width:48px;height:48px;flex-shrink:0}
+  .app-row .txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+  .app-row .q{font-weight:700;font-size:1rem;line-height:1.3}
+  .app-row .meta{font-size:.8rem;color:var(--text-muted)}
+  .app-row .meta .accent{color:#8a6400;font-weight:700}
+  .app-row .chev{color:#9aa6b8;font-size:1.3rem;font-weight:700;flex-shrink:0}
+  .foot{text-align:center;color:var(--text-muted);font-size:.8rem;margin:1.4rem 0 0}
+  @media(min-width:700px){.band{padding:1.9rem 1.5rem 4.5rem}}
+</style>
+
+<!-- Datos estructurados: la suite como sitio web + listado de herramientas -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "SumaCells",
+  "url": "https://sumacells.com/",
+  "inLanguage": "es-ES",
+  "description": "Suite de calculadoras financieras gratuitas para España: vivienda, nómina e IRPF, ahorro e inversión y rentabilidad.",
+  "publisher": { "@type": "Organization", "name": "SumaCells" },
+  "hasPart": [
+    { "@type": "WebApplication", "name": "SumaCells Home", "applicationCategory": "FinanceApplication", "url": "https://sumacells.com/casa/", "description": "Calcula a qué vivienda puedes aspirar según tu sueldo y tus ahorros." },
+    { "@type": "WebApplication", "name": "SumaCells Payroll", "applicationCategory": "FinanceApplication", "url": "https://sumacells.com/nomina/", "description": "Calculadora de nómina e IRPF en España: tu sueldo neto mes a mes." },
+    { "@type": "WebApplication", "name": "SumaCells Savings", "applicationCategory": "FinanceApplication", "url": "https://sumacells.com/ahorro/", "description": "Simula el crecimiento de tus ahorros invertidos en fondos indexados." },
+    { "@type": "WebApplication", "name": "SumaCells Return", "applicationCategory": "FinanceApplication", "url": "https://sumacells.com/rentabilidad/", "description": "Calcula la rentabilidad anual real de tus inversiones." },
+    { "@type": "WebApplication", "name": "SumaCells Forecast", "applicationCategory": "FinanceApplication", "url": "https://sumacells.com/forecast/", "description": "Planifica tu futuro financiero a largo plazo proyectando tu patrimonio año a año." }
+  ]
+}
+</script>
+</head>
+<body>
+<astro-header home></astro-header>
+<script>document.addEventListener('astro-lang',function(e){ if(window.setLang) window.setLang(e.detail.lang); });</script>
+
+<div class="band">
+  <div class="band-in">
+    <h1 class="hero-title" id="eyebrow">Herramientas financieras fáciles de entender</h1>
+  </div>
+</div>
+<div class="wrap">
+  <a class="continue hidden" id="continue" href="#">
+    <span class="ct"><small id="contLbl"></small><b id="contTxt"></b></span>
+    <span class="cv" id="contVal"></span>
+  </a>
+  <div id="apps"></div>
+  <p class="foot" id="foot"></p>
+</div>
+<style>.app-row:focus-visible,.continue:focus-visible{outline:3px solid var(--accent);outline-offset:2px}</style>
+
+<script>
+  var cfg = window.SUMACELLS;
+
+  /* Icono distintivo (planeta) de cada app, igual que su propia cabecera */
+  var ICONS = {
+    casa:
+      '<svg class="app-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+        '<defs><linearGradient id="cOrbit" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7aa1ff"/><stop offset="100%" stop-color="#f5c84b"/></linearGradient>' +
+        '<radialGradient id="cPlanet" cx="0.35" cy="0.3" r="0.85"><stop offset="0%" stop-color="#f8d97a"/><stop offset="55%" stop-color="#f5c84b"/><stop offset="100%" stop-color="#c79420"/></radialGradient>' +
+        '<clipPath id="cBack"><rect x="0" y="0" width="64" height="28"/></clipPath>' +
+        '<clipPath id="cFront"><rect x="0" y="28" width="64" height="36"/></clipPath></defs>' +
+        '<ellipse cx="32" cy="30" rx="26" ry="9" fill="none" stroke="url(#cOrbit)" stroke-width="2.4" transform="rotate(-22 32 30)" opacity="0.85" clip-path="url(#cBack)"/>' +
+        '<circle cx="32" cy="30" r="14" fill="url(#cPlanet)"/>' +
+        '<path d="M24.5 31.2 L32 24.8 L39.5 31.2 L37.6 31.2 L37.6 37 L34.2 37 L34.2 32.6 L29.8 32.6 L29.8 37 L26.4 37 L26.4 31.2 Z" fill="#1a2b5e"/>' +
+        '<circle cx="11" cy="14" r="1.4" fill="#fff"/><circle cx="54" cy="18" r="1" fill="#fff"/><circle cx="52" cy="48" r="1.2" fill="#fff"/><circle cx="9" cy="50" r="1" fill="#fff"/>' +
+        '<ellipse cx="32" cy="30" rx="26" ry="9" fill="none" stroke="url(#cOrbit)" stroke-width="2.4" transform="rotate(-22 32 30)" clip-path="url(#cFront)"/>' +
+      '</svg>',
+    nomina:
+      '<svg class="app-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+        '<defs><linearGradient id="nOrbit" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7aa1ff"/><stop offset="100%" stop-color="#f5c84b"/></linearGradient>' +
+        '<radialGradient id="nPlanet" cx="0.35" cy="0.3" r="0.85"><stop offset="0%" stop-color="#f8d97a"/><stop offset="55%" stop-color="#f5c84b"/><stop offset="100%" stop-color="#c79420"/></radialGradient>' +
+        '<clipPath id="nBack"><rect x="0" y="0" width="64" height="28"/></clipPath>' +
+        '<clipPath id="nFront"><rect x="0" y="28" width="64" height="36"/></clipPath></defs>' +
+        '<ellipse cx="32" cy="30" rx="26" ry="9" fill="none" stroke="url(#nOrbit)" stroke-width="2.4" transform="rotate(-22 32 30)" opacity="0.85" clip-path="url(#nBack)"/>' +
+        '<circle cx="32" cy="30" r="14" fill="url(#nPlanet)"/>' +
+        '<text x="32" y="36" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-weight="800" font-size="16" fill="#1a2b5e">€</text>' +
+        '<circle cx="11" cy="14" r="1.4" fill="#fff"/><circle cx="54" cy="18" r="1" fill="#fff"/><circle cx="52" cy="48" r="1.2" fill="#fff"/><circle cx="9" cy="50" r="1" fill="#fff"/>' +
+        '<ellipse cx="32" cy="30" rx="26" ry="9" fill="none" stroke="url(#nOrbit)" stroke-width="2.4" transform="rotate(-22 32 30)" clip-path="url(#nFront)"/>' +
+      '</svg>',
+    ahorro:
+      '<svg class="app-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+        '<defs><linearGradient id="aOrbit" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7aa1ff"/><stop offset="100%" stop-color="#f5c84b"/></linearGradient>' +
+        '<radialGradient id="aPlanet" cx="0.35" cy="0.3" r="0.85"><stop offset="0%" stop-color="#f8d97a"/><stop offset="55%" stop-color="#f5c84b"/><stop offset="100%" stop-color="#c79420"/></radialGradient>' +
+        '<clipPath id="aBack"><rect x="0" y="0" width="64" height="28"/></clipPath>' +
+        '<clipPath id="aFront"><rect x="0" y="28" width="64" height="36"/></clipPath></defs>' +
+        '<ellipse cx="32" cy="30" rx="26" ry="9" fill="none" stroke="url(#aOrbit)" stroke-width="2.4" transform="rotate(-22 32 30)" opacity="0.85" clip-path="url(#aBack)"/>' +
+        '<circle cx="32" cy="30" r="14" fill="url(#aPlanet)"/>' +
+        '<path d="M25 34 L30 29 L34 32 L40 25" fill="none" stroke="#1a2b5e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<path d="M36.5 25 L40 25 L40 28.5" fill="none" stroke="#1a2b5e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<circle cx="11" cy="14" r="1.4" fill="#fff"/><circle cx="54" cy="18" r="1" fill="#fff"/><circle cx="52" cy="48" r="1.2" fill="#fff"/><circle cx="9" cy="50" r="1" fill="#fff"/>' +
+        '<ellipse cx="32" cy="30" rx="26" ry="9" fill="none" stroke="url(#aOrbit)" stroke-width="2.4" transform="rotate(-22 32 30)" clip-path="url(#aFront)"/>' +
+      '</svg>',
+    rentabilidad:
+      '<svg class="app-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+        '<defs><linearGradient id="rOrbit" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7aa1ff"/><stop offset="100%" stop-color="#f5c84b"/></linearGradient>' +
+        '<radialGradient id="rPlanet" cx="0.35" cy="0.3" r="0.85"><stop offset="0%" stop-color="#f8d97a"/><stop offset="55%" stop-color="#f5c84b"/><stop offset="100%" stop-color="#c79420"/></radialGradient>' +
+        '<clipPath id="rBack"><rect x="0" y="0" width="64" height="28"/></clipPath>' +
+        '<clipPath id="rFront"><rect x="0" y="28" width="64" height="36"/></clipPath></defs>' +
+        '<ellipse cx="32" cy="30" rx="26" ry="9" fill="none" stroke="url(#rOrbit)" stroke-width="2.4" transform="rotate(-22 32 30)" opacity="0.85" clip-path="url(#rBack)"/>' +
+        '<circle cx="32" cy="30" r="14" fill="url(#rPlanet)"/>' +
+        '<rect x="25.5" y="31.5" width="3.1" height="5" rx="1" fill="#1a2b5e"/>' +
+        '<rect x="30.4" y="28.5" width="3.1" height="8" rx="1" fill="#1a2b5e"/>' +
+        '<rect x="35.3" y="25" width="3.1" height="11.5" rx="1" fill="#1a2b5e"/>' +
+        '<path d="M24.5 30 L31 25.5 L35 28 L40.5 23" fill="none" stroke="#1a2b5e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>' +
+        '<circle cx="11" cy="14" r="1.4" fill="#fff"/><circle cx="54" cy="18" r="1" fill="#fff"/><circle cx="52" cy="48" r="1.2" fill="#fff"/><circle cx="9" cy="50" r="1" fill="#fff"/>' +
+        '<ellipse cx="32" cy="30" rx="26" ry="9" fill="none" stroke="url(#rOrbit)" stroke-width="2.4" transform="rotate(-22 32 30)" clip-path="url(#rFront)"/>' +
+      '</svg>',
+    forecast:
+      '<svg class="app-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+        '<defs><linearGradient id="fOrbit" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7aa1ff"/><stop offset="100%" stop-color="#f5c84b"/></linearGradient>' +
+        '<radialGradient id="fPlanet" cx="0.35" cy="0.3" r="0.85"><stop offset="0%" stop-color="#f8d97a"/><stop offset="55%" stop-color="#f5c84b"/><stop offset="100%" stop-color="#c79420"/></radialGradient>' +
+        '<clipPath id="fBack"><rect x="0" y="0" width="64" height="28"/></clipPath>' +
+        '<clipPath id="fFront"><rect x="0" y="28" width="64" height="36"/></clipPath></defs>' +
+        '<ellipse cx="32" cy="30" rx="26" ry="9" fill="none" stroke="url(#fOrbit)" stroke-width="2.4" transform="rotate(-22 32 30)" opacity="0.85" clip-path="url(#fBack)"/>' +
+        '<circle cx="32" cy="30" r="14" fill="url(#fPlanet)"/>' +
+        '<path d="M24 35.5 C29 35 30.5 30.5 33 28 C35 26 36.8 25 38.5 24" fill="none" stroke="#1a2b5e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<path d="M38.5 21 L39.6 22.9 L41.5 24 L39.6 25.1 L38.5 27 L37.4 25.1 L35.5 24 L37.4 22.9 Z" fill="#1a2b5e"/>' +
+        '<circle cx="11" cy="14" r="1.4" fill="#fff"/><circle cx="54" cy="18" r="1" fill="#fff"/><circle cx="52" cy="48" r="1.2" fill="#fff"/><circle cx="9" cy="50" r="1" fill="#fff"/>' +
+        '<ellipse cx="32" cy="30" rx="26" ry="9" fill="none" stroke="url(#fOrbit)" stroke-width="2.4" transform="rotate(-22 32 30)" clip-path="url(#fFront)"/>' +
+      '</svg>'
+  };
+
+  var T = {
+    es: {
+      title: "SumaCells · Tu suite de calculadoras",
+      eyebrow: "Herramientas financieras fáciles de entender",
+      q: { nomina: "¿Cuánto cobraré neto al mes?", casa: "¿Qué piso me puedo permitir?", rentabilidad: "¿Cuál es la rentabilidad de mi inversión?", forecast: "¿Cuánto tendré cuando me jubile?", ahorro: "Empieza a invertir, paso a paso" },
+      meta: { nomina: "1 dato", casa: "2 datos", rentabilidad: "4 datos", forecast: "3 datos", ahorro: "6 pasos" },
+      sec: { calc: "Calculadoras", learn: "Guías" },
+      cont: "Continúa donde lo dejaste", foot: "Herramientas orientativas, no asesoramiento financiero."
+    },
+    ca: {
+      title: "SumaCells · La teva suite de calculadores",
+      eyebrow: "Eines financeres fàcils d'entendre",
+      q: { nomina: "Quant cobraré net cada mes?", casa: "Quin pis em puc permetre?", rentabilidad: "Quina és la rendibilitat de la meva inversió?", forecast: "Quant tindré quan em jubili?", ahorro: "Comença a invertir, pas a pas" },
+      meta: { nomina: "1 dada", casa: "2 dades", rentabilidad: "4 dades", forecast: "3 dades", ahorro: "6 passos" },
+      sec: { calc: "Calculadores", learn: "Guies" },
+      cont: "Continua on ho vas deixar", foot: "Eines orientatives, no assessorament financer."
+    },
+    en: {
+      title: "SumaCells · Your suite of calculators",
+      eyebrow: "Financial tools that are easy to understand",
+      q: { nomina: "How much will I take home each month?", casa: "What home can I afford?", rentabilidad: "What's the return on my investment?", forecast: "How much will I have when I retire?", ahorro: "Start investing, step by step" },
+      meta: { nomina: "1 input", casa: "2 inputs", rentabilidad: "4 inputs", forecast: "3 inputs", ahorro: "6 steps" },
+      sec: { calc: "Calculators", learn: "Guides" },
+      cont: "Pick up where you left off", foot: "Guidance tools, not financial advice."
+    }
+  };
+
+  function accentName(name){
+    return '<span class="accent">' + name + '</span>'; // nombre corto de brand.js (Home, Payroll…)
+  }
+
+  /* Agrupación de apps en el hub. Cualquier app de brand.js que no figure aquí
+     se añade automáticamente a "Calculadoras" (red de seguridad). */
+  var GROUPS = [
+    { key: "calc",  ids: ["casa", "nomina", "rentabilidad", "forecast"] },
+    { key: "learn", ids: ["ahorro"] }
+  ];
+  // apps de brand.js sin grupo asignado → a Calculadoras (una sola vez)
+  (function () {
+    var assigned = {}; GROUPS.forEach(function (g) { g.ids.forEach(function (id) { assigned[id] = 1; }); });
+    cfg.apps.forEach(function (a) { if (!assigned[a.id]) GROUPS[0].ids.push(a.id); });
+  })();
+
+  // Una fila por app: la pregunta que resuelve (en lenguaje llano) + marca y esfuerzo
+  function row(a, t) {
+    if (!a) return "";
+    return '<a class="app-row" href="' + a.href + '">' +
+             (ICONS[a.id] || "") +
+             '<span class="txt"><span class="q">' + ((t.q && t.q[a.id]) || a.tagline) + '</span>' +
+             '<span class="meta">' + accentName(a.name) + ((t.meta && t.meta[a.id]) ? ' · ' + t.meta[a.id] : '') + '</span></span>' +
+             '<span class="chev" aria-hidden="true">›</span>' +
+           '</a>';
+  }
+
+  // "Continúa donde lo dejaste": lo escribe shared/ux.js solo si la persona marcó "Recordar en este dispositivo"
+  function renderContinue(t, byId) {
+    var box = document.getElementById("continue"), last = null;
+    try { last = JSON.parse(localStorage.getItem("astro:last") || "null"); } catch (e) {}
+    var app = last && byId[last.app];
+    if (!app) { box.classList.add("hidden"); return; }
+    box.href = app.href;
+    document.getElementById("contLbl").textContent = t.cont;
+    document.getElementById("contTxt").textContent = last.label || app.name;
+    document.getElementById("contVal").textContent = last.value || "";
+    box.classList.remove("hidden");
+  }
+
+  function render(l) {
+    var t = T[l] || T.es;
+    document.title = t.title;
+    document.getElementById("eyebrow").textContent = t.eyebrow;
+    document.getElementById("foot").textContent = t.foot;
+
+    var byId = {}; cfg.apps.forEach(function (a) { byId[a.id] = a; });
+    renderContinue(t, byId);
+
+    document.getElementById("apps").innerHTML = GROUPS.map(function (g) {
+      var rows = g.ids.map(function (id) { return row(byId[id], t); }).join("");
+      if (!rows) return "";
+      return '<section class="apps-section">' +
+               '<div class="sec-head"><h2>' + t.sec[g.key] + '</h2></div>' + rows +
+             '</section>';
+    }).join("");
+  }
+
+  window.setLang = function (l) {
+    if (!T[l]) l = "es";
+    document.documentElement.lang = l;
+    render(l);
+  };
+
+  render("es");
+</script>
+</body>
+</html>
