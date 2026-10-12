@@ -427,7 +427,7 @@
 </head>
 <body>
 <!-- ================= CABECERA (shared/header.js) ================= -->
-<astro-header app="nomina" version="v2.19">
+<astro-header app="nomina" version="v2.20">
   <button slot="tabs" class="nav-btn active" onclick="showPage('calc')" data-i18n="nav_calc">Calculadora</button>
   <button slot="tabs" class="nav-btn" onclick="showPage('how')" data-i18n="nav_how">¿Cómo funciona?</button>
   <button slot="tabs" class="nav-btn" onclick="showPage('tramos')" data-i18n="nav_tramos">Tramos IRPF</button>
@@ -458,6 +458,12 @@
           <span style="font-size:0.78rem; color:var(--text-muted);" data-i18n="tip_salary_short">El sueldo de tu contrato antes de descuentos</span>
         </div>
       </div>
+    </div>
+
+    <!-- Comunidad autónoma: cambia la escala autonómica del IRPF y el mínimo personal autonómico -->
+    <div class="field" style="margin:.75rem 0 0;">
+      <label for="ccaa" data-i18n="lbl_ccaa">Comunidad autónoma donde vives</label>
+      <select id="ccaa" onchange="setCCAA(this.value)"></select>
     </div>
 
   </div>
@@ -977,17 +983,10 @@
     <div class="edu-body">
       <p data-i18n="edu2_p1">El IRPF es progresivo: cuanto más ganas, más pagas en proporción. Pero los porcentajes no se aplican a todo tu salario, sino solo a la parte que cae en cada tramo.</p>
       <div class="example-box">
-        <strong data-i18n="edu2_ex_title">Ejemplo: base liquidable de 45.000 € (escala Cataluña 2025)</strong>
+        <strong data-i18n="edu2_ex_title">Ejemplo: base liquidable de 45.000 € ({ccaa}, escala 2025)</strong>
         <table>
           <tr><th data-i18n="col_tramo">Tramo</th><th data-i18n="col_base">Base en tramo</th><th data-i18n="col_tipo">Tipo</th><th data-i18n="col_cuota">Cuota</th></tr>
-          <tr><td>0 – 12.450 €</td><td>12.450,00 €</td><td>20,00%</td><td>2.490,00 €</td></tr>
-          <tr><td>12.450 – 17.707 €</td><td>5.257,00 €</td><td>24,00%</td><td>1.261,68 €</td></tr>
-          <tr><td>17.707 – 20.200 €</td><td>2.493,00 €</td><td>26,00%</td><td>648,18 €</td></tr>
-          <tr><td>20.200 – 21.000 €</td><td>800,00 €</td><td>29,00%</td><td>232,00 €</td></tr>
-          <tr><td>21.000 – 33.007 €</td><td>12.007,00 €</td><td>30,00%</td><td>3.602,10 €</td></tr>
-          <tr><td>33.007 – 35.200 €</td><td>2.193,00 €</td><td>33,80%</td><td>741,23 €</td></tr>
-          <tr><td>35.200 – 45.000 €</td><td>9.800,00 €</td><td>37,30%</td><td>3.655,40 €</td></tr>
-          <tr><td colspan="3"><strong data-i18n="col_total">Cuota íntegra</strong></td><td><strong>12.630,59 €</strong></td></tr>
+          <tbody id="eduExBody"><!-- se rellena con renderEduExample() según la comunidad --></tbody>
         </table>
       </div>
     </div>
@@ -1091,8 +1090,8 @@
 
 <!-- TRAMOS PAGE -->
 <div class="page" id="page-tramos">
-  <h1 style="font-size:1.3rem; font-weight:700; color:var(--primary); margin-bottom:0.5rem; padding-top:0.5rem;" data-i18n="tramos_title">Tramos del IRPF 2025 · Cataluña</h1>
-  <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:1.5rem;" data-i18n="tramos_sub">Suma del tipo estatal y del tipo autonómico de Cataluña. Otras CCAA aplican tipos diferentes.</p>
+  <h1 style="font-size:1.3rem; font-weight:700; color:var(--primary); margin-bottom:0.5rem; padding-top:0.5rem;" data-i18n="tramos_title">Tramos del IRPF 2025 · {ccaa}</h1>
+  <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:1.5rem;" data-i18n="tramos_sub">Suma del tipo estatal y del tipo autonómico de {ccaa} (escalas oficiales de la Agencia Tributaria, Renta 2025). Puedes cambiar de comunidad en la calculadora.</p>
 
   <div class="card" style="padding:0; overflow:hidden;">
     <table class="tramos-table" style="margin:0;">
@@ -1104,21 +1103,7 @@
           <th data-i18n="col_tipo_total">Total</th>
         </tr>
       </thead>
-      <tbody>
-        <tr><td>0 – 12.450 €</td><td>9,50%</td><td>10,50%</td><td><span class="tramo-pct">20,00%</span><div class="tramo-bar-wrap"><div class="tramo-bar" style="width:20%;"></div></div></td></tr>
-        <tr><td>12.450 – 17.707 €</td><td>12,00%</td><td>12,00%</td><td><span class="tramo-pct">24,00%</span><div class="tramo-bar-wrap"><div class="tramo-bar" style="width:24%;"></div></div></td></tr>
-        <tr><td>17.707 – 20.200 €</td><td>12,00%</td><td>14,00%</td><td><span class="tramo-pct">26,00%</span><div class="tramo-bar-wrap"><div class="tramo-bar" style="width:26%;"></div></div></td></tr>
-        <tr><td>20.200 – 21.000 €</td><td>15,00%</td><td>14,00%</td><td><span class="tramo-pct">29,00%</span><div class="tramo-bar-wrap"><div class="tramo-bar" style="width:29%;"></div></div></td></tr>
-        <tr><td>21.000 – 33.007 €</td><td>15,00%</td><td>15,00%</td><td><span class="tramo-pct">30,00%</span><div class="tramo-bar-wrap"><div class="tramo-bar" style="width:30%;"></div></div></td></tr>
-        <tr><td>33.007 – 35.200 €</td><td>15,00%</td><td>18,80%</td><td><span class="tramo-pct">33,80%</span><div class="tramo-bar-wrap"><div class="tramo-bar" style="width:33.8%;"></div></div></td></tr>
-        <tr><td>35.200 – 53.407 €</td><td>18,50%</td><td>18,80%</td><td><span class="tramo-pct">37,30%</span><div class="tramo-bar-wrap"><div class="tramo-bar" style="width:37.3%;"></div></div></td></tr>
-        <tr><td>53.407 – 60.000 €</td><td>18,50%</td><td>21,50%</td><td><span class="tramo-pct">40,00%</span><div class="tramo-bar-wrap"><div class="tramo-bar" style="width:40%;"></div></div></td></tr>
-        <tr><td>60.000 – 90.000 €</td><td>22,50%</td><td>21,50%</td><td><span class="tramo-pct">44,00%</span><div class="tramo-bar-wrap"><div class="tramo-bar" style="width:44%;"></div></div></td></tr>
-        <tr><td>90.000 – 120.000 €</td><td>22,50%</td><td>23,50%</td><td><span class="tramo-pct">46,00%</span><div class="tramo-bar-wrap"><div class="tramo-bar" style="width:46%;"></div></div></td></tr>
-        <tr><td>120.000 – 175.000 €</td><td>22,50%</td><td>24,50%</td><td><span class="tramo-pct">47,00%</span><div class="tramo-bar-wrap"><div class="tramo-bar" style="width:47%;"></div></div></td></tr>
-        <tr><td>175.000 – 300.000 €</td><td>22,50%</td><td>25,50%</td><td><span class="tramo-pct">48,00%</span><div class="tramo-bar-wrap"><div class="tramo-bar" style="width:48%;"></div></div></td></tr>
-        <tr><td data-i18n="tramo_top_range">Más de 300.000 €</td><td>24,50%</td><td>25,50%</td><td><span class="tramo-pct">50,00%</span><div class="tramo-bar-wrap"><div class="tramo-bar" style="width:50%;"></div></div></td></tr>
-      </tbody>
+      <tbody id="tramosBody"><!-- se rellena con renderTramosPage() según la comunidad --></tbody>
     </table>
   </div>
 
@@ -1142,24 +1127,73 @@
 </div>
 
 <script>
-const APP_VERSION = '2.19';
-// Escala IRPF 2025 — Cataluña (suma estatal + autonómico)
-// Fuente: https://taxdown.es/irpf/tabla-tramos
-const TRAMOS = [
-  {from:0,      to:12450,    rate:0.20},
-  {from:12450,  to:17707,    rate:0.24},
-  {from:17707,  to:20200,    rate:0.26},
-  {from:20200,  to:21000,    rate:0.29},
-  {from:21000,  to:33007,    rate:0.30},
-  {from:33007,  to:35200,    rate:0.338},
-  {from:35200,  to:53407,    rate:0.373},
-  {from:53407,  to:60000,    rate:0.40},
-  {from:60000,  to:90000,    rate:0.44},
-  {from:90000,  to:120000,   rate:0.46},
-  {from:120000, to:175000,   rate:0.47},
-  {from:175000, to:300000,   rate:0.48},
-  {from:300000, to:Infinity, rate:0.50}
-];
+const APP_VERSION = '2.20';
+// ===== Escalas IRPF 2025 sobre la base liquidable general =====
+// Fuente: Agencia Tributaria, Manual práctico de Renta 2025, cap. 15 (gravamen estatal y
+// autonómico) y cap. 14 (mínimos personales autonómicos). Formato: [desde €, tipo %]; cada
+// tramo llega hasta el "desde" del siguiente. Solo las 15 CCAA de régimen común: País Vasco
+// y Navarra tienen IRPF foral propio y no están incluidas.
+const ESCALA_ESTATAL = [[0,9.5],[12450,12],[20200,15],[35200,18.5],[60000,22.5],[300000,24.5]];
+const MINIMO_ESTATAL = 5550;
+const CCAA = {
+  andalucia:        { n:{es:'Andalucía',ca:'Andalusia',en:'Andalusia'}, min:5790,
+    esc:[[0,9.5],[13000,12],[21100,15],[35200,18.5],[60000,22.5]] },
+  aragon:           { n:{es:'Aragón',ca:'Aragó',en:'Aragon'}, min:5550,
+    esc:[[0,9.5],[13072.5,12],[21210,15],[36960,18.5],[52500,20.5],[60000,23],[80000,24],[90000,25],[130000,25.5]] },
+  asturias:         { n:{es:'Asturias',ca:'Astúries',en:'Asturias'}, min:6105,
+    esc:[[0,9],[12450,12],[17707.2,14],[33007.2,19.2],[53407.2,21.5],[70000,22.5],[90000,25],[175000,26]] },
+  baleares:         { n:{es:'Illes Balears',ca:'Illes Balears',en:'Balearic Islands'}, min:5550,
+    esc:[[0,9],[10000,11.25],[18000,14.25],[30000,17.5],[48000,19],[70000,21.75],[90000,22.75],[120000,23.75],[175000,24.75]] },
+  canarias:         { n:{es:'Canarias',ca:'Canàries',en:'Canary Islands'}, min:5606,
+    esc:[[0,9],[13748,11.5],[19422,14],[35924,18.5],[57566,23.5],[93268,25],[123745,26]] },
+  cantabria:        { n:{es:'Cantabria',ca:'Cantàbria',en:'Cantabria'}, min:5550,
+    esc:[[0,8.5],[13000,11],[21000,14.5],[35200,18],[60000,22.5],[90000,24.5]] },
+  castillalamancha: { n:{es:'Castilla-La Mancha',ca:'Castella-la Manxa',en:'Castilla-La Mancha'}, min:5550,
+    esc:[[0,9.5],[12450,12],[20200,15],[35200,18.5],[60000,22.5]] },
+  castillaleon:     { n:{es:'Castilla y León',ca:'Castella i Lleó',en:'Castile and León'}, min:5550,
+    esc:[[0,9],[12450,12],[20200,14],[35200,18.5],[53407.2,21.5]] },
+  cataluna:         { n:{es:'Cataluña',ca:'Catalunya',en:'Catalonia'}, min:5550,
+    esc:[[0,9.5],[12500,12.5],[22000,16],[33000,19],[53000,21.5],[90000,23.5],[120000,24.5],[175000,25.5]] },
+  valenciana:       { n:{es:'Comunitat Valenciana',ca:'Comunitat Valenciana',en:'Valencian Community'}, min:6105,
+    esc:[[0,9],[12000,12],[22000,15],[32000,17.5],[42000,20],[52000,22.5],[62000,25],[72000,26.5],[100000,27.5],[150000,28.5],[200000,29.5]] },
+  extremadura:      { n:{es:'Extremadura',ca:'Extremadura',en:'Extremadura'}, min:5550,
+    esc:[[0,8],[12450,10],[20200,16],[24200,17.5],[35200,21],[60000,23.5],[80200,24],[99200,24.5],[120200,25]] },
+  galicia:          { n:{es:'Galicia',ca:'Galícia',en:'Galicia'}, min:5789,
+    esc:[[0,9],[12985.35,11.65],[21068.6,14.9],[35200,18.4],[60000,22.5]] },
+  madrid:           { n:{es:'Madrid',ca:'Madrid',en:'Madrid'}, min:5956.65,
+    esc:[[0,8.5],[13362.22,10.7],[19004.63,12.8],[35425.68,17.4],[57320.4,20.5]] },
+  murcia:           { n:{es:'Región de Murcia',ca:'Regió de Múrcia',en:'Region of Murcia'}, min:5550,
+    esc:[[0,9.5],[12450,11.2],[20200,13.3],[34000,17.9],[60000,22.5]] },
+  rioja:            { n:{es:'La Rioja',ca:'La Rioja',en:'La Rioja'}, min:5550,
+    esc:[[0,8],[12450,10.6],[20200,13.6],[35200,17.8],[40000,18.3],[50000,19],[60000,24.5],[120000,27]] }
+};
+const CCAA_DEFAULT = 'cataluna';
+let CCAA_ID = CCAA_DEFAULT;
+
+// Cuota de una escala [desde, tipo%] sobre una base.
+function scaleTax(esc, base){
+  let tax = 0;
+  for(let i = 0; i < esc.length; i++){
+    const from = esc[i][0], to = i+1 < esc.length ? esc[i+1][0] : Infinity;
+    if(base <= from) break;
+    tax += (Math.min(base, to) - from) * esc[i][1] / 100;
+  }
+  return Math.max(0, tax);
+}
+function rateAt(esc, x){ let r = esc[0][1]; for(const [from, rate] of esc){ if(x >= from) r = rate; } return r; }
+// Escala COMBINADA (estatal + autonómica) de la comunidad elegida, en el formato {from,to,rate}
+// que usan el tipo marginal, la página de tramos y el ejemplo interactivo.
+function buildTramos(){
+  const reg = CCAA[CCAA_ID].esc;
+  const cuts = Array.from(new Set(ESCALA_ESTATAL.map(r => r[0]).concat(reg.map(r => r[0])))).sort((a,b) => a-b);
+  return cuts.map((from, i) => ({
+    from, to: i+1 < cuts.length ? cuts[i+1] : Infinity,
+    est: rateAt(ESCALA_ESTATAL, from), aut: rateAt(reg, from),
+    rate: Math.round((rateAt(ESCALA_ESTATAL, from) + rateAt(reg, from)) * 100) / 10000
+  }));
+}
+let TRAMOS = buildTramos();
+function ccaaName(id){ const c = CCAA[id || CCAA_ID]; return (c.n[currentLang] || c.n.es); }
 // Cotización SS empleado 2026 (régimen general, contrato indefinido):
 //   CC 4,70% + Desempleo 1,55% + FP 0,10% + MEI 0,15% = 6,50%
 const SS_RATE = 0.0650;
@@ -1285,8 +1319,8 @@ const T = {
     privacy_title:'🔒 Privacidad.', privacy_body:' SumaCells Payroll no almacena ni envía tus datos personales o financieros a ningún servidor. Todos los cálculos se ejecutan localmente en tu navegador. Usamos Umami Analytics (sin cookies, sin identificadores personales) únicamente para contar visitas y acciones básicas de navegación — nunca se guardan datos de salarios, tipos impositivos ni ningún dato financiero.',
     how_title:'Entiende tu nómina',
     edu1_title:'🔍 ¿Qué es el IRPF?', edu1_p1:'El IRPF (Impuesto sobre la Renta de las Personas Físicas) es el impuesto que pagas por lo que ganas.', edu1_p2:'Tu empresa lo descuenta automáticamente cada mes de tu nómina antes de pagarte. Eso es la "retención".',
-    edu2_title:'📈 ¿Qué significa que haya tramos?', edu2_p1:'El IRPF es progresivo: cuanto más ganas, más pagas en proporción. Pero los porcentajes no se aplican a todo tu salario.', edu2_ex_title:'Ejemplo: base liquidable de 45.000 € (escala Cataluña 2025)',
-    edu3_title:'🎯 Tipo marginal vs tipo efectivo', edu3_p1:'Tipo marginal: el porcentaje que pagas por el último euro que ganas. Si tu base liquidable son 50.000 € (Cataluña 2025), tu tipo marginal es el 37,30%.', edu3_p2:'Tipo efectivo: el porcentaje real medio que pagas sobre todo tu salario.', edu3_p3:'Por eso, una subida salarial no te hace pagar más en el tramo anterior.',
+    edu2_title:'📈 ¿Qué significa que haya tramos?', edu2_p1:'El IRPF es progresivo: cuanto más ganas, más pagas en proporción. Pero los porcentajes no se aplican a todo tu salario.', edu2_ex_title:'Ejemplo: base liquidable de 45.000 € ({ccaa}, escala 2025)',
+    edu3_title:'🎯 Tipo marginal vs tipo efectivo', edu3_p1:'Tipo marginal: el porcentaje que pagas por el último euro que ganas. Si tu base liquidable son 50.000 € ({ccaa}, 2025), tu tipo marginal es el {m50}.', edu3_p2:'Tipo efectivo: el porcentaje real medio que pagas sobre todo tu salario.', edu3_p3:'Por eso, una subida salarial no te hace pagar más en el tramo anterior.',
     edu4_title:'📋 ¿Qué es la base imponible?', edu4_p1:'La base imponible es la cantidad sobre la que se calcula el IRPF.', edu4_p2:'Se suman: salario base, bonus, car allowance, retribuciones en especie.', edu4_p3:'Se restan: aportaciones al plan de pensiones, tickets y seguro médico en retribución flexible.',
     edu5_title:'🍽️ ¿Por qué los tickets restaurante me ahorran dinero?', edu5_p1:'Los tickets (hasta 2.750 €/año) están exentos de IRPF y SS.', edu5_p2:'El ahorro se calcula con tu tipo marginal porque ese importe sustituye a la parte más alta de tu salario.',
     edu6_title:'🔄 ¿Qué es la retribución flexible?', edu6_p1:'Cambias parte de tu salario bruto por beneficios con ventaja fiscal.', edu6_p2:'Esos importes dejan de tributar en IRPF y de cotizar a la SS (hasta los límites legales).',
@@ -1295,7 +1329,8 @@ const T = {
     edu9_title:'🏛️ ¿Qué es la Seguridad Social?', edu9_p1:'El sistema que financia la sanidad, pensiones y desempleo.', edu9_p2:'En 2026 pagas como empleado: CC 4,70% + desempleo 1,55% + FP 0,10% + MEI 0,15% = 6,50% sobre la base, con tope anual de 61.214,40 €.',
     edu10_title:'⚡ ¿Qué es la cuota de solidaridad?', edu10_p1:'Cotización adicional sobre el salario que supera el tope de la SS. Se reparte ~5:1 entre empresa y trabajador.', edu10_p2:'Tipos que paga el empleado en 2026: 0,19% / 0,21% / 0,24% según el tramo del exceso. Solo afecta si superas 61.214,40 €.',
     sol_t1:'De 0 € a 6.121,44 € de exceso', sol_t2:'De 6.121,44 € a 30.607,20 € de exceso', sol_t3:'Más de 30.607,20 € de exceso',
-    tramos_title:'Tramos del IRPF 2025 · Cataluña', tramos_sub:'Suma del tipo estatal y del tipo autonómico de Cataluña. Otras CCAA aplican tipos diferentes.',
+    lbl_ccaa:'Comunidad autónoma donde vives', ccaa_foral:'País Vasco y Navarra: régimen foral (no disponible)',
+    tramos_title:'Tramos del IRPF 2025 · {ccaa}', tramos_sub:'Suma del tipo estatal y del tipo autonómico de {ccaa} (escalas oficiales de la Agencia Tributaria, Renta 2025). Puedes cambiar de comunidad en la calculadora.',
     col_tramo:'Tramo', col_tipo:'Tipo', col_tipo_estatal:'Estatal', col_tipo_auto:'Autonómico', col_tipo_total:'Total', col_cuota:'Cuota', col_cuota_tramo:'Lo que pagas en este tramo', col_desc:'Explicación', col_base:'Base en tramo', col_total:'Cuota íntegra',
     tramo_top_range:'Más de 300.000 €',
     tramo_ex_title:'Calcula tu IRPF tramo a tramo', tramo_ex_input:'Base imponible anual',
@@ -1305,7 +1340,7 @@ const T = {
     tramo_sum_total:'IRPF total (cuota íntegra)', tramo_sum_total_sub:'Suma del IRPF de todos los tramos.',
     tramo_sum_eff:'Tipo efectivo', tramo_sum_eff_sub:'Lo que pagas de media sobre el total.',
     tramo_sum_marg:'Tipo marginal', tramo_sum_marg_sub:'Lo que pagarías por el siguiente euro extra.',
-    tramo_note:'Cálculo orientativo: aplica la escala IRPF de Cataluña 2025 directamente sobre el importe. La base imponible real ya descuenta reducciones (rendimientos del trabajo, plan de pensiones, mínimo personal, etc.). Para tu cuota líquida final usa la calculadora principal.',
+    tramo_note:'Cálculo orientativo: aplica la escala IRPF 2025 de {ccaa} directamente sobre el importe. La base imponible real ya descuenta reducciones (rendimientos del trabajo, plan de pensiones, mínimo personal, etc.). Para tu cuota líquida final usa la calculadora principal.',
     month_bonus:'Bonus', month_raise:'Subida',
     ann_gross:'Bruto total anual', ann_salary:'Salario base', ann_car:'Car allowance', ann_bonus:'Bonus bruto', ann_health_spkd:'Retribución en especie: seguro médico', ann_life_spkd:'Retribución en especie: seguro vida',
     ann_rend_integros:'Rendimientos íntegros del trabajo',
@@ -1421,8 +1456,8 @@ const T = {
     privacy_title:'🔒 Privacitat.', privacy_body:" SumaCells Payroll no emmagatzema ni envia dades personals o financeres a cap servidor. Tots els càlculs s'executen localment al teu navegador. Fem servir Umami Analytics (sense galetes, sense identificadors personals) únicament per comptar visites i accions bàsiques de navegació — mai s'envien salaris, tipus impositius ni cap dada financera.",
     how_title:'Entén la teva nòmina',
     edu1_title:"🔍 Què és l'IRPF?", edu1_p1:"L'IRPF (Impost sobre la Renda de les Persones Físiques) és l'impost que pagues pel que guanyes.", edu1_p2:'La teva empresa el descompta automàticament cada mes de la nòmina.',
-    edu2_title:'📈 Què significa que hi hagi trams?', edu2_p1:"L'IRPF és progressiu: com més guanyes, més pagues en proporció.", edu2_ex_title:'Exemple: base liquidable de 45.000 € (escala Catalunya 2025)',
-    edu3_title:'🎯 Tipus marginal vs tipus efectiu', edu3_p1:"Tipus marginal: el percentatge que pagues per l'últim euro que guanyes. Si la teva base liquidable és de 50.000 € (Catalunya 2025), el teu tipus marginal és el 37,30%.", edu3_p2:'Tipus efectiu: el percentatge real mitjà que pagues sobre tot el teu salari.', edu3_p3:"Per tant, una pujada salarial no et fa pagar més en el tram anterior.",
+    edu2_title:'📈 Què significa que hi hagi trams?', edu2_p1:"L'IRPF és progressiu: com més guanyes, més pagues en proporció.", edu2_ex_title:'Exemple: base liquidable de 45.000 € ({ccaa}, escala 2025)',
+    edu3_title:'🎯 Tipus marginal vs tipus efectiu', edu3_p1:"Tipus marginal: el percentatge que pagues per l'últim euro que guanyes. Si la teva base liquidable és de 50.000 € ({ccaa}, 2025), el teu tipus marginal és el {m50}.", edu3_p2:'Tipus efectiu: el percentatge real mitjà que pagues sobre tot el teu salari.', edu3_p3:"Per tant, una pujada salarial no et fa pagar més en el tram anterior.",
     edu4_title:'📋 Què és la base imposable?', edu4_p1:"La base imposable és la quantitat sobre la qual es calcula l'IRPF.", edu4_p2:"S'hi sumen: salari base, bonus, car allowance, retribucions en espècie.", edu4_p3:"S'hi resten: aportacions al pla de pensions, tiquets i assegurança mèdica en retribució flexible.",
     edu5_title:'🍽️ Per què els tiquets restaurant estalvien diners?', edu5_p1:"Els tiquets (fins a 2.750 €/any) estan exempts d'IRPF i SS.", edu5_p2:"L'estalvi es calcula amb el teu tipus marginal.",
     edu6_title:'🔄 Què és la retribució flexible?', edu6_p1:'Canvies part del teu salari brut per beneficis amb avantatge fiscal.', edu6_p2:"Aquests imports deixen de tributar a l'IRPF i de cotitzar a la SS.",
@@ -1431,7 +1466,8 @@ const T = {
     edu9_title:"🏛️ Què és la Seguretat Social?", edu9_p1:'El sistema que finança la sanitat, pensions i atur.', edu9_p2:'El 2026 pagues com a empleat: CC 4,70% + atur 1,55% + FP 0,10% + MEI 0,15% = 6,50% sobre la base, amb topall anual de 61.214,40 €.',
     edu10_title:'⚡ Què és la quota de solidaritat?', edu10_p1:"Cotització addicional sobre el salari que supera el topall de la SS. Es reparteix ~5:1 entre empresa i treballador.", edu10_p2:"Tipus que paga l'empleat el 2026: 0,19% / 0,21% / 0,24% segons el tram de l'excés. Només afecta si superes 61.214,40 €.",
     sol_t1:"De 0 € a 6.121,44 € d'excés", sol_t2:"De 6.121,44 € a 30.607,20 € d'excés", sol_t3:"Més de 30.607,20 € d'excés",
-    tramos_title:"Trams de l'IRPF 2025 · Catalunya", tramos_sub:"Suma del tipus estatal i del tipus autonòmic de Catalunya. Altres CCAA apliquen tipus diferents.",
+    lbl_ccaa:'Comunitat autònoma on vius', ccaa_foral:'País Basc i Navarra: règim foral (no disponible)',
+    tramos_title:"Trams de l'IRPF 2025 · {ccaa}", tramos_sub:"Suma del tipus estatal i de l'autonòmic ({ccaa}), segons les escales oficials de l'Agència Tributària (Renda 2025). Pots canviar de comunitat a la calculadora.",
     col_tramo:'Tram', col_tipo:'Tipus', col_tipo_estatal:'Estatal', col_tipo_auto:'Autonòmic', col_tipo_total:'Total', col_cuota:'Quota', col_cuota_tramo:'El que pagues en aquest tram', col_desc:'Explicació', col_base:'Base en tram', col_total:'Quota íntegra',
     tramo_top_range:'Més de 300.000 €',
     tramo_ex_title:"Calcula el teu IRPF tram a tram", tramo_ex_input:'Base imposable anual',
@@ -1441,7 +1477,7 @@ const T = {
     tramo_sum_total:'IRPF total (quota íntegra)', tramo_sum_total_sub:"Suma de l'IRPF de tots els trams.",
     tramo_sum_eff:'Tipus efectiu', tramo_sum_eff_sub:'El que pagues de mitjana sobre el total.',
     tramo_sum_marg:'Tipus marginal', tramo_sum_marg_sub:'El que pagaries pel següent euro extra.',
-    tramo_note:"Càlcul orientatiu: aplica l'escala IRPF de Catalunya 2025 directament sobre l'import. La base imposable real ja descompta reduccions (rendiments del treball, pla de pensions, mínim personal, etc.). Per a la teva quota líquida final fes servir la calculadora principal.",
+    tramo_note:"Càlcul orientatiu: aplica l'escala IRPF 2025 ({ccaa}) directament sobre l'import. La base imposable real ja descompta reduccions (rendiments del treball, pla de pensions, mínim personal, etc.). Per a la teva quota líquida final fes servir la calculadora principal.",
     month_bonus:'Bonus', month_raise:'Pujada',
     ann_gross:'Brut total anual', ann_salary:'Salari base', ann_car:'Car allowance', ann_bonus:'Bonus brut', ann_health_spkd:'Retribució en espècie: assegurança mèdica', ann_life_spkd:'Retribució en espècie: assegurança vida',
     ann_rend_integros:'Rendiments íntegres del treball',
@@ -1557,8 +1593,8 @@ const T = {
     privacy_title:'🔒 Privacy.', privacy_body:" SumaCells Payroll does not store or send your personal or financial data to any server. All calculations run locally in your browser. We use Umami Analytics (no cookies, no personal identifiers) solely to count visits and basic navigation actions — no salaries, tax rates or financial data are ever sent.",
     how_title:'Understand your payslip',
     edu1_title:'🔍 What is income tax (IRPF)?', edu1_p1:'IRPF (Personal Income Tax) is the tax you pay on what you earn.', edu1_p2:'Your company automatically deducts it from your payslip each month before paying you.',
-    edu2_title:'📈 What does having tax brackets mean?', edu2_p1:'IRPF is progressive: the more you earn, the more you pay proportionally. But percentages only apply to the income within each bracket.', edu2_ex_title:'Example: €45,000 taxable base (Catalonia 2025 scale)',
-    edu3_title:'🎯 Marginal rate vs effective rate', edu3_p1:'Marginal rate: the percentage you pay on your last earned euro. If your taxable base is €50,000 (Catalonia 2025), your marginal rate is 37.30%.', edu3_p2:'Effective rate: the real average percentage you pay on your total salary.', edu3_p3:'So a salary raise does not make you pay more on your previous income.',
+    edu2_title:'📈 What does having tax brackets mean?', edu2_p1:'IRPF is progressive: the more you earn, the more you pay proportionally. But percentages only apply to the income within each bracket.', edu2_ex_title:'Example: €45,000 taxable base ({ccaa}, 2025 scale)',
+    edu3_title:'🎯 Marginal rate vs effective rate', edu3_p1:'Marginal rate: the percentage you pay on your last earned euro. If your taxable base is €50,000 ({ccaa}, 2025), your marginal rate is {m50}.', edu3_p2:'Effective rate: the real average percentage you pay on your total salary.', edu3_p3:'So a salary raise does not make you pay more on your previous income.',
     edu4_title:'📋 What is the taxable base?', edu4_p1:'The taxable base is the amount on which income tax is calculated.', edu4_p2:'Added: base salary, bonus, car allowance, benefits in kind.', edu4_p3:'Deducted: pension contributions, meal vouchers and health insurance under flexible remuneration.',
     edu5_title:'🍽️ Why do meal vouchers save me money?', edu5_p1:'Meal vouchers (up to €2,750/year) are exempt from income tax and social security.', edu5_p2:'The saving is calculated at your marginal rate.',
     edu6_title:'🔄 What is flexible remuneration?', edu6_p1:'You exchange part of your gross salary for tax-advantaged benefits.', edu6_p2:'Those amounts stop being subject to income tax and social security (within legal limits).',
@@ -1567,7 +1603,8 @@ const T = {
     edu9_title:'🏛️ What is Social Security?', edu9_p1:'The system that funds healthcare, pensions, and unemployment.', edu9_p2:'In 2026 you pay as an employee: CC 4.70% + unemployment 1.55% + FP 0.10% + MEI 0.15% = 6.50% on the contribution base, with an annual cap of €61,214.40.',
     edu10_title:'⚡ What is the solidarity surcharge?', edu10_p1:'Extra contribution on the part of the salary above the SS cap. Split roughly 5:1 between employer and employee.', edu10_p2:'Employee rates in 2026: 0.19% / 0.21% / 0.24% by excess tier. Only affects those who exceed €61,214.40.',
     sol_t1:'From €0 to €6,121.44 of excess', sol_t2:'From €6,121.44 to €30,607.20 of excess', sol_t3:'More than €30,607.20 of excess',
-    tramos_title:'2025 Income Tax Brackets · Catalonia', tramos_sub:'Sum of state rate and Catalonia regional rate. Other regions apply different rates.',
+    lbl_ccaa:'Region where you live', ccaa_foral:'Basque Country & Navarre: own tax system (not available)',
+    tramos_title:'2025 Income Tax Brackets · {ccaa}', tramos_sub:'Sum of the state rate and the {ccaa} regional rate (official Tax Agency scales, 2025 tax year). You can change region in the calculator.',
     col_tramo:'Bracket', col_tipo:'Rate', col_tipo_estatal:'State', col_tipo_auto:'Regional', col_tipo_total:'Total', col_cuota:'Tax due', col_cuota_tramo:'What you pay in this bracket', col_desc:'Explanation', col_base:'Income in bracket', col_total:'Gross tax',
     tramo_top_range:'Over €300,000',
     tramo_ex_title:'See how the brackets apply to you', tramo_ex_input:'Annual taxable base',
@@ -1577,7 +1614,7 @@ const T = {
     tramo_sum_total:'Total income tax (gross liability)', tramo_sum_total_sub:'Sum of the tax in every bracket.',
     tramo_sum_eff:'Effective rate', tramo_sum_eff_sub:'What you pay on average across the whole base.',
     tramo_sum_marg:'Marginal rate', tramo_sum_marg_sub:'What you would pay on the next euro earned.',
-    tramo_note:'Indicative calculation: applies the 2025 Catalonia IRPF scale directly to the amount you enter. The real taxable base already nets out work-income reductions, pension contributions, personal allowance and so on. For your actual liability, use the main calculator.',
+    tramo_note:'Indicative calculation: applies the 2025 {ccaa} IRPF scale directly to the amount you enter. The real taxable base already nets out work-income reductions, pension contributions, personal allowance and so on. For your actual liability, use the main calculator.',
     month_bonus:'Bonus', month_raise:'Raise',
     ann_gross:'Total annual gross', ann_salary:'Base salary', ann_car:'Car allowance', ann_bonus:'Gross bonus', ann_health_spkd:'Benefit in kind: health insurance', ann_life_spkd:'Benefit in kind: life insurance',
     ann_rend_integros:'Gross employment income',
@@ -1613,13 +1650,20 @@ const T = {
   }
 };
 
-function t(key){ return (T[currentLang] && T[currentLang][key]) || T['es'][key] || key; }
+function t(key){
+  const v = (T[currentLang] && T[currentLang][key]) || T['es'][key] || key;
+  if(typeof v !== 'string') return v;
+  // Comodines: {ccaa} = comunidad elegida · {m50} = tipo marginal combinado con 50.000 € de base
+  return v.replace(/\{ccaa\}/g, ccaaName())
+          .replace(/\{m50\}/g, () => (getMarginalRate(50000)*100).toFixed(2).replace('.', currentLang==='en' ? '.' : ',') + '%');
+}
 
 function setLang(lang){
   currentLang = lang;
   document.documentElement.lang = lang;
   applyTranslations();
   populateMonthSelects();
+  populateCCAASelect(); renderTramosPage(); renderEduExample();
   if(typeof reformatAllMoneyInputs === 'function') reformatAllMoneyInputs();
   if(lastResult) renderResults(lastResult);
   utrack('lang_change', { lang });
@@ -1631,6 +1675,42 @@ function applyTranslations(){
     if(el.tagName === 'INPUT' && el.type !== 'checkbox') el.placeholder = t(key);
     else el.textContent = t(key);
   });
+}
+
+/* ===== Comunidad autónoma ===== */
+function pctStr(x){ return x.toFixed(2).replace('.', currentLang==='en' ? '.' : ',') + '%'; }
+function populateCCAASelect(){
+  const sel = document.getElementById('ccaa'); if(!sel) return;
+  const ids = Object.keys(CCAA).sort((a,b) => ccaaName(a).localeCompare(ccaaName(b), currentLang));
+  sel.innerHTML = ids.map(id => `<option value="${id}"${id===CCAA_ID?' selected':''}>${ccaaName(id)}</option>`).join('')
+    + `<option disabled>${t('ccaa_foral')}</option>`;
+}
+function setCCAA(id){
+  if(!CCAA[id]) id = CCAA_DEFAULT;
+  CCAA_ID = id; TRAMOS = buildTramos();
+  const sel = document.getElementById('ccaa'); if(sel && sel.value !== id) sel.value = id;
+  applyTranslations(); renderTramosPage(); renderEduExample();
+  const ti = document.getElementById('tramoInput'); if(ti && ti.value) renderTramoExample();
+  utrack('ccaa_change', { ccaa: id });
+}
+// Pantalla "Tramos IRPF": escala combinada (estatal + autonómica) de la comunidad elegida
+function renderTramosPage(){
+  const tb = document.getElementById('tramosBody'); if(!tb) return;
+  tb.innerHTML = TRAMOS.map(tr => {
+    const total = tr.est + tr.aut;
+    const range = tr.to === Infinity ? t('tramo_top_range') : `${fmtInt(tr.from)} – ${fmtInt(tr.to)} €`;
+    return `<tr><td>${range}</td><td>${pctStr(tr.est)}</td><td>${pctStr(tr.aut)}</td><td><span class="tramo-pct">${pctStr(total)}</span><div class="tramo-bar-wrap"><div class="tramo-bar" style="width:${total}%;"></div></div></td></tr>`;
+  }).join('');
+}
+// "¿Qué significa que haya tramos?": ejemplo con 45.000 € de base en la comunidad elegida
+function renderEduExample(){
+  const tb = document.getElementById('eduExBody'); if(!tb) return;
+  const base = 45000; let total = 0;
+  const rows = TRAMOS.filter(tr => base > tr.from).map(tr => {
+    const portion = Math.min(base, tr.to) - tr.from, tax = portion * tr.rate; total += tax;
+    return `<tr><td>${fmtInt(tr.from)} – ${fmtInt(Math.min(base, tr.to))} €</td><td>${fmt(portion)}</td><td>${pctStr(tr.rate*100)}</td><td>${fmt(tax)}</td></tr>`;
+  }).join('');
+  tb.innerHTML = rows + `<tr><td colspan="3"><strong>${t('col_total')}</strong></td><td><strong>${fmt(total)}</strong></td></tr>`;
 }
 
 function populateMonthSelects(){
@@ -1934,9 +2014,12 @@ function calcAnnualIRPF(rendIntegros, ssAnnual, pension){
   const reduccion = reduccionTrabajo(rntPrevio);
   const rntReducido = Math.max(0, rntPrevio - reduccion);
   const baseLiquidable = Math.max(0, rntReducido - pension);
-  const cuotaIntegra = calcIRPF(baseLiquidable);
-  const cuotaMinimo = calcIRPF(MINIMO_PERSONAL);
-  return { irpf: Math.max(0, cuotaIntegra - cuotaMinimo), baseLiquidable };
+  // Arts. 63 y 74 LIRPF: cuota estatal y autonómica por separado; a cada una se le resta su
+  // escala aplicada al mínimo personal (estatal o el de la comunidad, que puede ser distinto).
+  const reg = CCAA[CCAA_ID];
+  const cuotaEstatal    = Math.max(0, scaleTax(ESCALA_ESTATAL, baseLiquidable) - scaleTax(ESCALA_ESTATAL, MINIMO_ESTATAL));
+  const cuotaAutonomica = Math.max(0, scaleTax(reg.esc, baseLiquidable) - scaleTax(reg.esc, reg.min));
+  return { irpf: cuotaEstatal + cuotaAutonomica, baseLiquidable };
 }
 
 // Coeficiente del Art. 52.1 LIRPF: aportación máxima del trabajador con derecho
@@ -2729,6 +2812,7 @@ function shareResult(){
   const r = lastResult;
   const lines = [
     `=== SumaCells Payroll · ${t('res_title')} ===`,
+    `${t('lbl_ccaa')}: ${ccaaName()}`,
     `${t('ann_gross')}: ${fmt(r.totalGross)}`,
     `${t('ann_irpf')}: −${fmt(r.totalIRPF)} (${fmtPct(r.effectiveRate*100)})`,
     `${t('ann_ss')}: −${fmt(r.totalSS + r.totalSol)}`,
@@ -2859,6 +2943,7 @@ function utrack(event, props){
 
 // ── Init
 populateMonthSelects();
+populateCCAASelect(); renderTramosPage(); renderEduExample();
 document.getElementById('hasPensionExtra').checked = true;
 document.getElementById('pensionExtraSec').classList.add('open');
 applyTranslations();
@@ -2894,6 +2979,7 @@ function serializeForm(){
 function restoreForm(json){
   let st; try { st = JSON.parse(json); } catch(e){ return false; }
   if(!st || !st.v || !st.v.salaryBase) return false;
+  if(st.v.ccaa && CCAA[st.v.ccaa]) setCCAA(st.v.ccaa);
   Object.keys(st.v).forEach(id => { const el = document.getElementById(id); if(el) el.value = st.v[id]; });
   Object.keys(st.r || {}).forEach(n => {
     const el = document.querySelector(`#page-calc input[type="radio"][name="${n}"][value="${st.r[n]}"]`);

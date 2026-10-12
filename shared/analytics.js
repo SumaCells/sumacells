@@ -21,6 +21,7 @@
           : /\/ahorro\//.test(p)       ? "SumaCells Savings"
           : /\/rentabilidad\//.test(p) ? "SumaCells Return"
           : /\/forecast\//.test(p)     ? "SumaCells Forecast"
+          : /\/como-calculamos\//.test(p) ? "Cómo calculamos"
           : "Hub";
 
   var s = document.createElement("script");

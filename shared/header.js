@@ -27,14 +27,14 @@
    ============================================================ */
 (function () {
   var cfg = window.SUMACELLS || { brand: "SumaCells", apps: [] };
-  var inApp = /\/(casa|nomina|ahorro|rentabilidad|forecast)\//.test(location.pathname);
+  var inApp = /\/(casa|nomina|ahorro|rentabilidad|forecast|como-calculamos)\//.test(location.pathname);
   var prefix = inApp ? "../" : ""; // para llegar a las apps hermanas
 
   var ICONS = { casa: "🏠", nomina: "🧾", ahorro: "📈", rentabilidad: "📊", forecast: "🔭" };
   var MENU_T = {
-    es: { apps: "Cambiar de app", lang: "Idioma" },
-    ca: { apps: "Canviar d'app", lang: "Idioma" },
-    en: { apps: "Switch app", lang: "Language" }
+    es: { apps: "Cambiar de app", lang: "Idioma", how: "Cómo calculamos" },
+    ca: { apps: "Canviar d'app", lang: "Idioma", how: "Com calculem" },
+    en: { apps: "Switch app", lang: "Language", how: "How we calculate" }
   };
 
   // Logo de la suite: planeta dorado con órbita (neutro, igual en las 3 apps)
@@ -152,6 +152,9 @@
               '<div class="menu-lbl" id="lbl-lang">' + mt.lang + "</div>" +
               '<div class="lang-row">' + langBtns + "</div>" +
             "</div>" +
+            '<div class="menu-sec">' +
+              '<a href="' + prefix + 'como-calculamos/" id="lnk-how"><span class="ic">ℹ️</span> <span id="lbl-how">' + mt.how + "</span></a>" +
+            "</div>" +
           "</div>" +
         "</header>";
 
@@ -197,8 +200,10 @@
       var mt = MENU_T[l] || MENU_T.es;
       var la = this._root.getElementById("lbl-apps");
       var ll = this._root.getElementById("lbl-lang");
+      var lh = this._root.getElementById("lbl-how");
       if (la) la.textContent = mt.apps;
       if (ll) ll.textContent = mt.lang;
+      if (lh) lh.textContent = mt.how;
     }
   }
 

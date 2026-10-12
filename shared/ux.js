@@ -86,6 +86,16 @@
     pc.appendChild(form); pc.appendChild(out);
   }
 
+  /* ---- Zona principal: agrupa las pantallas (.page) en un <main> (accesibilidad) ---- */
+  function wrapMain() {
+    if (document.querySelector("main,[role=main]")) return;
+    var pages = document.querySelectorAll("body > .page");
+    if (!pages.length) return;
+    var m = document.createElement("main");
+    pages[0].parentNode.insertBefore(m, pages[0]);
+    Array.prototype.forEach.call(pages, function (p) { m.appendChild(p); });
+  }
+
   /* ---- Barra de resultado fija (móvil) ---- */
   function buildBar() {
     if (bar) return;
@@ -93,6 +103,7 @@
     bar.innerHTML = '<div class="rb-txt"><span class="rb-lbl"></span><span class="rb-val"></span></div><button type="button"></button>';
     document.body.appendChild(bar);
     barLbl = bar.querySelector(".rb-lbl"); barVal = bar.querySelector(".rb-val"); barBtn = bar.querySelector("button");
+    barBtn.textContent = tx("see"); // nunca vacío: los lectores de pantalla necesitan un nombre
     barBtn.addEventListener("click", function () {
       if (!heroEl) return;
       if (heroBelow()) { heroEl.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
@@ -135,7 +146,7 @@
   var AstroUX = {
     init: function (opts) {
       app = (opts && opts.app) || "";
-      wrapCalc(); linkLabels(); a11yInfo(); buildBar();
+      wrapMain(); wrapCalc(); linkLabels(); a11yInfo(); buildBar();
       var pc = document.getElementById("page-calc");
       if (pc && "MutationObserver" in window) {
         var pending = false;

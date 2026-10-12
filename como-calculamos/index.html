@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cómo calculamos: fuentes y supuestos · SumaCells</title>
+<meta name="description" content="De dónde salen las cifras de SumaCells: tramos de IRPF, cotizaciones, hipotecas y supuestos de inversión, con sus fuentes oficiales y lo que no tenemos en cuenta.">
+
+<!-- Favicon (planeta de la suite, SVG inline) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='30' r='15' fill='%23f5c84b'/%3E%3Cellipse cx='32' cy='34' rx='27' ry='9' fill='none' stroke='%237aa1ff' stroke-width='3' transform='rotate(-22 32 34)'/%3E%3C/svg%3E">
+
+<!-- Open Graph / previsualización en redes y mensajería -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SumaCells">
+<meta property="og:locale" content="es_ES">
+<meta property="og:title" content="Cómo calculamos: fuentes y supuestos · SumaCells">
+<meta property="og:description" content="Qué hay detrás de cada cifra de SumaCells: fuentes oficiales, supuestos y lo que no tenemos en cuenta.">
+<meta property="og:url" content="https://sumacells.com/como-calculamos/">
+<meta property="og:image" content="https://sumacells.com/og.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="SumaCells — suite de calculadoras financieras">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cómo calculamos: fuentes y supuestos · SumaCells">
+<meta name="twitter:description" content="Qué hay detrás de cada cifra de SumaCells: fuentes oficiales, supuestos y lo que no tenemos en cuenta.">
+<meta name="twitter:image" content="https://sumacells.com/og.jpg">
+
+<link rel="canonical" href="https://sumacells.com/como-calculamos/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../shared/tokens.css">
+<link rel="stylesheet" href="../shared/base.css">
+<script src="../shared/brand.js"></script>
+<script src="../shared/header.js" defer></script>
+<script src="../shared/feedback.js" defer></script>
+<script src="../shared/analytics.js" defer></script>
+<style>
+  /* Misma piel que el hub: franja navy + tarjetas blancas */
+  body{background:var(--bg);-webkit-font-smoothing:antialiased}
+  .band{background:var(--topbar-gradient);color:#fff;padding:1.6rem 1.25rem 4.2rem;border-radius:0 0 28px 28px}
+  .band-in{max-width:720px;margin:0 auto}
+  .band h1{font-weight:800;font-size:clamp(1.35rem,5vw,1.8rem);line-height:1.2;letter-spacing:-.01em;color:#fff;margin:0 0 .45rem}
+  .band p{color:#c9d3ee;font-size:1rem;line-height:1.5;margin:0;max-width:560px}
+  .band .rev{display:inline-block;margin-top:.8rem;font-size:.78rem;font-weight:700;letter-spacing:.04em;color:#f5c84b}
+  .wrap{max-width:720px;margin:-3.2rem auto 0;padding:0 1rem 3rem;position:relative}
+  .card{background:#fff;border:1px solid #e3e8f1;border-radius:20px;box-shadow:var(--shadow);padding:1.15rem 1.25rem 1.2rem;margin-bottom:1rem}
+  .card h2{display:flex;align-items:center;gap:8px;font-size:.9rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin:0 0 .75rem}
+  .card h2::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0}
+  .card h3{font-size:1.02rem;font-weight:800;color:var(--text);margin:1.15rem 0 .1rem}
+  .card h3:first-of-type{margin-top:.2rem}
+  .card .q{font-size:.82rem;color:var(--text-muted);margin:0 0 .5rem}
+  .card .q b{color:#8a6400}
+  .card p,.card li{font-size:.94rem;line-height:1.55;color:var(--text)}
+  .card p{margin:0 0 .6rem}
+  .card ul{margin:0 0 .4rem;padding-left:1.15rem}
+  .card li{margin:.25rem 0}
+  .card li.no{list-style:none;margin-left:-1.15rem;padding:.55rem .75rem;background:#f7f9fd;border:1px solid #e9eef6;border-radius:12px;color:var(--text-muted);font-size:.88rem;margin-top:.55rem}
+  .card a{color:var(--primary);font-weight:700}
+  .card hr{border:0;border-top:1px solid #eef1f6;margin:1rem 0}
+  .back{display:inline-flex;align-items:center;gap:6px;margin:.4rem 0 0;font-weight:700;color:var(--primary);text-decoration:none}
+  .back:hover{text-decoration:underline}
+  .foot{text-align:center;color:var(--text-muted);font-size:.8rem;margin:1.4rem 0 0}
+  [data-lang]{display:none}
+  [data-lang].on{display:block}
+  @media(min-width:700px){.band{padding:2rem 1.5rem 4.5rem}}
+</style>
+
+<!-- Datos estructurados: página "sobre nosotros / metodología" -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "Cómo calculamos: fuentes y supuestos",
+  "url": "https://sumacells.com/como-calculamos/",
+  "inLanguage": "es-ES",
+  "dateModified": "2026-10-12",
+  "description": "Metodología, fuentes oficiales y supuestos de las calculadoras financieras de SumaCells.",
+  "isPartOf": { "@type": "WebSite", "name": "SumaCells", "url": "https://sumacells.com/" },
+  "publisher": { "@type": "Organization", "name": "SumaCells", "url": "https://sumacells.com/" }
+}
+</script>
+</head>
+<body>
+<astro-header home></astro-header>
+<script>document.addEventListener('astro-lang',function(e){ if(window.setLang) window.setLang(e.detail.lang); });</script>
+
+<main>
+<!-- ======================= ESPAÑOL ======================= -->
+<div data-lang="es" class="on">
+<div class="band"><div class="band-in">
+  <h1>Cómo calculamos</h1>
+  <p>Qué hay detrás de cada cifra de SumaCells: de dónde salen los datos, qué suponemos y qué no tenemos en cuenta.</p>
+  <span class="rev">Última revisión: octubre de 2026</span>
+</div></div>
+<div class="wrap">
+
+  <section class="card">
+    <h2>Qué es SumaCells</h2>
+    <p>SumaCells es un proyecto independiente de calculadoras financieras gratuitas para España, explicadas en lenguaje llano. Nació de unas hojas de Excel personales para tomar decisiones de verdad (comprar un piso, entender la nómina, empezar a invertir) y las hemos convertido en herramientas que cualquiera puede usar desde el móvil.</p>
+    <ul>
+      <li><b>Gratis y sin registro.</b></li>
+      <li><b>Sin intereses comerciales:</b> no vendemos productos financieros, no cobramos comisiones de bancos ni de gestoras y no hay publicidad.</li>
+      <li><b>Tus datos no salen de tu dispositivo:</b> los cálculos se hacen en tu navegador. Solo contamos visitas de forma anónima con Umami (sin cookies) y, si nos escribes con el botón de opinión, recibimos lo que escribas.</li>
+      <li><b>Es orientativo:</b> te ayuda a entender y a hacer números, pero no es asesoramiento financiero ni fiscal. Para decisiones importantes, contrasta con tu banco, tu gestoría o un asesor.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Calculadora por calculadora</h2>
+
+    <h3>¿Qué piso me puedo permitir?</h3>
+    <p class="q"><b>SumaCells Home</b></p>
+    <ul>
+      <li><b>Cuota máxima:</b> suponemos que el banco no deja que la hipoteca supere el 30% de tu sueldo neto (puedes cambiarlo).</li>
+      <li><b>Préstamo:</b> con esa cuota, el interés y los años calculamos el préstamo máximo con el sistema habitual en España: cuota fija todos los meses (sistema francés).</li>
+      <li><b>Financiación:</b> el banco pone el 80% del precio (editable) y tú pones la entrada.</li>
+      <li><b>Impuestos y gastos:</b> 10% de ITP por defecto (vivienda de segunda mano; el tipo depende de la comunidad autónoma) más un 2% de notaría, registro, gestoría y tasación. En vivienda nueva se paga IVA (10%) y AJD en lugar de ITP: ajusta el porcentaje.</li>
+      <li><b>Interés de referencia:</b> 2,2% a 30 años, solo como punto de partida. Pon el que te ofrezca tu banco.</li>
+      <li class="no">No incluye ayudas públicas ni avales (como los de jóvenes), bonificaciones por contratar otros productos, seguros, comisiones del banco ni otras deudas que tengas.</li>
+    </ul>
+
+    <h3>¿Cuánto cobraré neto al mes?</h3>
+    <p class="q"><b>SumaCells Payroll</b></p>
+    <ul>
+      <li><b>IRPF:</b> escala estatal de 2025 más la escala autonómica de tu comunidad (las 15 de régimen común), tal como las publica la Agencia Tributaria. Elige tu comunidad en la calculadora.</li>
+      <li><b>Base y reducciones:</b> aplicamos el gasto deducible general (2.000 €), la reducción por rendimientos del trabajo (art. 20 de la Ley del IRPF) y el mínimo personal: 5.550 € en la parte estatal y el de tu comunidad en la autonómica (algunas lo amplían, como Madrid, Andalucía o la Comunitat Valenciana).</li>
+      <li><b>Seguridad Social 2026</b> (empleado, contrato indefinido): 6,50% sobre la base de cotización (contingencias comunes 4,70%, desempleo 1,55%, formación profesional 0,10% y MEI 0,15%), con un tope de 61.214,40 € al año, más la cuota de solidaridad por encima de ese tope.</li>
+      <li><b>Retribución flexible y pensiones:</b> tickets de comida (hasta 2.750 € al año exentos), seguro médico (hasta 500 €), transporte (hasta 1.500 €) y aportaciones a planes de pensiones.</li>
+      <li class="no">No incluye País Vasco ni Navarra (tienen un IRPF foral propio), hijos, discapacidad, deducciones autonómicas ni contratos temporales, ni cómo reparte exactamente tu empresa la retención cada mes. Por eso tu neto real puede diferir algo.</li>
+    </ul>
+
+    <h3>Empieza a invertir, paso a paso</h3>
+    <p class="q"><b>SumaCells Savings</b></p>
+    <ul>
+      <li><b>Crecimiento:</b> suponemos un 6% anual de media para una cartera de fondos indexados globales. Es una cifra prudente: el índice MSCI World ha subido de media en torno a un 8% anual desde 1979, con años muy malos (en 2008 cayó cerca de un 40%).</li>
+      <li><b>Retirada:</b> para estimar cuánto podrías sacar cada año sin agotar el dinero usamos un 3%.</li>
+      <li><b>Ahorrar para un piso:</b> entrada (20%) + impuestos (10%) + gastos (2%) del precio.</li>
+      <li><b>Impuestos:</b> las ganancias tributan en la base del ahorro del IRPF (del 19% al 30%, tramos de 2025) cuando vendes, no antes.</li>
+      <li class="no">No incluye las comisiones concretas de cada fondo ni los altibajos de cada año, y las cifras no descuentan la inflación.</li>
+    </ul>
+
+    <h3>¿Cuál es la rentabilidad de mi inversión?</h3>
+    <p class="q"><b>SumaCells Return</b></p>
+    <ul>
+      <li><b>Rentabilidad anual (TIR/XIRR):</b> calculamos el ritmo medio anual teniendo en cuenta las fechas reales de la compra, la venta y cada dividendo.</li>
+      <li><b>Comparativa:</b> frente a no hacer nada (0%), la inflación (2,5%), un fondo monetario (3%) y la bolsa mundial (8%). Son referencias que puedes cambiar, no promesas.</li>
+      <li class="no">No incluye impuestos ni comisiones que no hayas descontado tú de los importes.</li>
+    </ul>
+
+    <h3>¿Cuánto tendré cuando me jubile?</h3>
+    <p class="q"><b>SumaCells Forecast</b></p>
+    <ul>
+      <li><b>Proyección año a año</b> de tu patrimonio con lo que ahorras o retiras a cada edad.</li>
+      <li><b>Rentabilidad supuesta:</b> 6% anual por defecto (editable).</li>
+      <li><b>Euros de cada año:</b> no descontamos la inflación. Con una inflación del 2,5%, los precios se duplican aproximadamente cada 28 años.</li>
+      <li><b>Retirada:</b> 3% anual por defecto, algo más prudente que la conocida «regla del 4%».</li>
+      <li class="no">Rentabilidades pasadas no garantizan rentabilidades futuras.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Fuentes</h2>
+    <ul>
+      <li><a href="https://www.boe.es/" rel="noopener" target="_blank">BOE</a> y <a href="https://sede.agenciatributaria.gob.es/" rel="noopener" target="_blank">Agencia Tributaria</a>: Ley 35/2006 del IRPF, escalas y reducciones.</li>
+      <li><a href="https://www.seg-social.es/" rel="noopener" target="_blank">Seguridad Social</a>: bases y tipos de cotización.</li>
+      <li><a href="https://clientebancario.bde.es/" rel="noopener" target="_blank">Banco de España · Portal del Cliente Bancario</a>: cómo funcionan las hipotecas y su cuota.</li>
+      <li><a href="https://www.ine.es/" rel="noopener" target="_blank">INE</a>: índice de precios de consumo, para situar la inflación de referencia.</li>
+      <li><a href="https://www.msci.com/" rel="noopener" target="_blank">MSCI</a>: histórico del índice MSCI World.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Actualizaciones y errores</h2>
+    <p>Revisamos las cifras cuando cambian las normas. La próxima revisión importante será en <b>enero de 2027</b>, con las nuevas tablas de IRPF y cotizaciones.</p>
+    <p>¿Has visto un error o algo que no se entiende? Cuéntanoslo con el botón de opinión de abajo o del final de cualquier calculadora. Lo corregimos lo antes posible.</p>
+    <p>SumaCells no está vinculado a ningún banco ni entidad financiera.</p>
+  </section>
+
+  <a class="back" href="../">← Volver a las calculadoras</a>
+</div>
+</div>
+
+<!-- ======================= CATALÀ ======================= -->
+<div data-lang="ca">
+<div class="band"><div class="band-in">
+  <h1>Com calculem</h1>
+  <p>Què hi ha darrere de cada xifra de SumaCells: d’on surten les dades, què suposem i què no tenim en compte.</p>
+  <span class="rev">Última revisió: octubre de 2026</span>
+</div></div>
+<div class="wrap">
+
+  <section class="card">
+    <h2>Què és SumaCells</h2>
+    <p>SumaCells és un projecte independent de calculadores financeres gratuïtes per a Espanya, explicades en llenguatge planer. Va néixer d’uns fulls d’Excel personals per prendre decisions de debò (comprar un pis, entendre la nòmina, començar a invertir) i els hem convertit en eines que qualsevol pot fer servir des del mòbil.</p>
+    <ul>
+      <li><b>Gratis i sense registre.</b></li>
+      <li><b>Sense interessos comercials:</b> no venem productes financers, no cobrem comissions de bancs ni de gestores i no hi ha publicitat.</li>
+      <li><b>Les teves dades no surten del teu dispositiu:</b> els càlculs es fan al teu navegador. Només comptem visites de manera anònima amb Umami (sense galetes) i, si ens escrius amb el botó d’opinió, rebem el que escriguis.</li>
+      <li><b>És orientatiu:</b> t’ajuda a entendre i a fer números, però no és assessorament financer ni fiscal. Per a decisions importants, contrasta-ho amb el teu banc, la teva gestoria o un assessor.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Calculadora per calculadora</h2>
+
+    <h3>Quin pis em puc permetre?</h3>
+    <p class="q"><b>SumaCells Home</b></p>
+    <ul>
+      <li><b>Quota màxima:</b> suposem que el banc no deixa que la hipoteca superi el 30% del teu sou net (ho pots canviar).</li>
+      <li><b>Préstec:</b> amb aquesta quota, l’interès i els anys calculem el préstec màxim amb el sistema habitual a Espanya: quota fixa cada mes (sistema francès).</li>
+      <li><b>Finançament:</b> el banc posa el 80% del preu (editable) i tu poses l’entrada.</li>
+      <li><b>Impostos i despeses:</b> 10% d’ITP per defecte (habitatge de segona mà; el tipus depèn de la comunitat autònoma) més un 2% de notaria, registre, gestoria i taxació. En habitatge nou es paga IVA (10%) i AJD en lloc d’ITP: ajusta el percentatge.</li>
+      <li><b>Interès de referència:</b> 2,2% a 30 anys, només com a punt de partida. Posa el que t’ofereixi el teu banc.</li>
+      <li class="no">No inclou ajuts públics ni avals (com els de joves), bonificacions per contractar altres productes, assegurances, comissions del banc ni altres deutes que tinguis.</li>
+    </ul>
+
+    <h3>Quant cobraré net cada mes?</h3>
+    <p class="q"><b>SumaCells Payroll</b></p>
+    <ul>
+      <li><b>IRPF:</b> escala estatal de 2025 més l’escala autonòmica de la teva comunitat (les 15 de règim comú), tal com les publica l’Agència Tributària. Tria la teva comunitat a la calculadora.</li>
+      <li><b>Base i reduccions:</b> apliquem la despesa deduïble general (2.000 €), la reducció per rendiments del treball (art. 20 de la Llei de l’IRPF) i el mínim personal: 5.550 € a la part estatal i el de la teva comunitat a l’autonòmica (algunes l’amplien, com Madrid, Andalusia o la Comunitat Valenciana).</li>
+      <li><b>Seguretat Social 2026</b> (empleat, contracte indefinit): 6,50% sobre la base de cotització (contingències comunes 4,70%, atur 1,55%, formació professional 0,10% i MEI 0,15%), amb un topall de 61.214,40 € l’any, més la quota de solidaritat per sobre d’aquest topall.</li>
+      <li><b>Retribució flexible i pensions:</b> tiquets de menjar (fins a 2.750 € l’any exempts), assegurança mèdica (fins a 500 €), transport (fins a 1.500 €) i aportacions a plans de pensions.</li>
+      <li class="no">No inclou el País Basc ni Navarra (tenen un IRPF foral propi), fills, discapacitat, deduccions autonòmiques ni contractes temporals, ni com reparteix exactament la teva empresa la retenció cada mes. Per això el teu net real pot diferir una mica.</li>
+    </ul>
+
+    <h3>Comença a invertir, pas a pas</h3>
+    <p class="q"><b>SumaCells Savings</b></p>
+    <ul>
+      <li><b>Creixement:</b> suposem un 6% anual de mitjana per a una cartera de fons indexats globals. És una xifra prudent: l’índex MSCI World ha pujat de mitjana al voltant d’un 8% anual des del 1979, amb anys molt dolents (el 2008 va caure prop d’un 40%).</li>
+      <li><b>Retirada:</b> per estimar quant podries treure cada any sense esgotar els diners fem servir un 3%.</li>
+      <li><b>Estalviar per a un pis:</b> entrada (20%) + impostos (10%) + despeses (2%) del preu.</li>
+      <li><b>Impostos:</b> els guanys tributen a la base de l’estalvi de l’IRPF (del 19% al 30%, trams del 2025) quan vens, no abans.</li>
+      <li class="no">No inclou les comissions concretes de cada fons ni els alts i baixos de cada any, i les xifres no descompten la inflació.</li>
+    </ul>
+
+    <h3>Quina és la rendibilitat de la meva inversió?</h3>
+    <p class="q"><b>SumaCells Return</b></p>
+    <ul>
+      <li><b>Rendibilitat anual (TIR/XIRR):</b> calculem el ritme mitjà anual tenint en compte les dates reals de la compra, la venda i cada dividend.</li>
+      <li><b>Comparativa:</b> davant de no fer res (0%), la inflació (2,5%), un fons monetari (3%) i la borsa mundial (8%). Són referències que pots canviar, no promeses.</li>
+      <li class="no">No inclou impostos ni comissions que no hagis descomptat tu dels imports.</li>
+    </ul>
+
+    <h3>Quant tindré quan em jubili?</h3>
+    <p class="q"><b>SumaCells Forecast</b></p>
+    <ul>
+      <li><b>Projecció any a any</b> del teu patrimoni amb el que estalvies o retires a cada edat.</li>
+      <li><b>Rendibilitat suposada:</b> 6% anual per defecte (editable).</li>
+      <li><b>Euros de cada any:</b> no descomptem la inflació. Amb una inflació del 2,5%, els preus es dupliquen aproximadament cada 28 anys.</li>
+      <li><b>Retirada:</b> 3% anual per defecte, una mica més prudent que la coneguda «regla del 4%».</li>
+      <li class="no">Rendibilitats passades no garanteixen rendibilitats futures.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Fonts</h2>
+    <ul>
+      <li><a href="https://www.boe.es/" rel="noopener" target="_blank">BOE</a> i <a href="https://sede.agenciatributaria.gob.es/" rel="noopener" target="_blank">Agència Tributària</a>: Llei 35/2006 de l’IRPF, escales i reduccions.</li>
+      <li><a href="https://www.seg-social.es/" rel="noopener" target="_blank">Seguretat Social</a>: bases i tipus de cotització.</li>
+      <li><a href="https://clientebancario.bde.es/" rel="noopener" target="_blank">Banc d’Espanya · Portal del Client Bancari</a>: com funcionen les hipoteques i la seva quota.</li>
+      <li><a href="https://www.ine.es/" rel="noopener" target="_blank">INE</a>: índex de preus de consum, per situar la inflació de referència.</li>
+      <li><a href="https://www.msci.com/" rel="noopener" target="_blank">MSCI</a>: històric de l’índex MSCI World.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Actualitzacions i errors</h2>
+    <p>Revisem les xifres quan canvien les normes. La propera revisió important serà el <b>gener de 2027</b>, amb les noves taules d’IRPF i cotitzacions.</p>
+    <p>Has vist un error o alguna cosa que no s’entén? Explica-ho amb el botó d’opinió de sota o del final de qualsevol calculadora. Ho corregirem al més aviat possible.</p>
+    <p>SumaCells no està vinculat a cap banc ni entitat financera.</p>
+  </section>
+
+  <a class="back" href="../">← Tornar a les calculadores</a>
+</div>
+</div>
+
+<!-- ======================= ENGLISH ======================= -->
+<div data-lang="en">
+<div class="band"><div class="band-in">
+  <h1>How we calculate</h1>
+  <p>What’s behind every SumaCells figure: where the data comes from, what we assume and what we leave out.</p>
+  <span class="rev">Last reviewed: October 2026</span>
+</div></div>
+<div class="wrap">
+
+  <section class="card">
+    <h2>What SumaCells is</h2>
+    <p>SumaCells is an independent project of free personal-finance calculators for Spain, explained in plain language. It started as a set of personal Excel sheets used to make real decisions (buying a home, understanding a payslip, starting to invest), which we turned into tools anyone can use from their phone.</p>
+    <ul>
+      <li><b>Free, no sign-up.</b></li>
+      <li><b>No commercial interests:</b> we don’t sell financial products, we take no commissions from banks or fund managers, and there are no ads.</li>
+      <li><b>Your data stays on your device:</b> calculations run in your browser. We only count visits anonymously with Umami (no cookies) and, if you write to us with the feedback button, we receive what you write.</li>
+      <li><b>Guidance only:</b> it helps you understand and run the numbers, but it is not financial or tax advice. For important decisions, check with your bank, your accountant or an adviser.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Calculator by calculator</h2>
+
+    <h3>What home can I afford?</h3>
+    <p class="q"><b>SumaCells Home</b></p>
+    <ul>
+      <li><b>Maximum payment:</b> we assume the bank won’t let the mortgage payment exceed 30% of your net salary (you can change it).</li>
+      <li><b>Loan:</b> from that payment, the interest rate and the term we work out the maximum loan using the usual system in Spain: the same payment every month (French amortisation).</li>
+      <li><b>Financing:</b> the bank lends 80% of the price (editable) and you pay the deposit.</li>
+      <li><b>Taxes and costs:</b> 10% transfer tax (ITP) by default (resale homes; the rate depends on the region) plus 2% for notary, land registry, agency and valuation. New homes pay VAT (10%) and AJD instead of ITP: adjust the percentage.</li>
+      <li><b>Reference interest rate:</b> 2.2% over 30 years, just as a starting point. Enter the one your bank offers.</li>
+      <li class="no">It doesn’t include public aid or guarantees (such as those for young buyers), discounts for taking other products, insurance, bank fees or other debts you may have.</li>
+    </ul>
+
+    <h3>How much will I take home each month?</h3>
+    <p class="q"><b>SumaCells Payroll</b></p>
+    <ul>
+      <li><b>Income tax (IRPF):</b> 2025 state scale plus your region’s scale (all 15 common-regime regions), as published by the Spanish Tax Agency. Pick your region in the calculator.</li>
+      <li><b>Base and allowances:</b> we apply the general deductible expense (€2,000), the employment-income reduction (art. 20 of the IRPF Act) and the personal allowance: €5,550 for the state part and your region’s amount for the regional part (some regions raise it, such as Madrid, Andalusia or Valencia).</li>
+      <li><b>Social Security 2026</b> (employee, permanent contract): 6.50% of the contribution base (common contingencies 4.70%, unemployment 1.55%, vocational training 0.10% and MEI 0.15%), capped at €61,214.40 a year, plus the solidarity contribution above that cap.</li>
+      <li><b>Flexible pay and pensions:</b> meal vouchers (up to €2,750 a year tax-free), health insurance (up to €500), transport (up to €1,500) and pension-plan contributions.</li>
+      <li class="no">It doesn’t include the Basque Country or Navarre (they have their own tax system), children, disability, regional tax credits or temporary contracts, nor exactly how your employer spreads the withholding across the year. That’s why your actual net pay may differ slightly.</li>
+    </ul>
+
+    <h3>Start investing, step by step</h3>
+    <p class="q"><b>SumaCells Savings</b></p>
+    <ul>
+      <li><b>Growth:</b> we assume 6% a year on average for a portfolio of global index funds. It’s a cautious figure: the MSCI World index has risen around 8% a year on average since 1979, with some very bad years (in 2008 it fell almost 40%).</li>
+      <li><b>Withdrawals:</b> to estimate how much you could take out each year without running out, we use 3%.</li>
+      <li><b>Saving for a home:</b> deposit (20%) + taxes (10%) + costs (2%) of the price.</li>
+      <li><b>Taxes:</b> gains are taxed in the IRPF savings base (19% to 30%, 2025 brackets) when you sell, not before.</li>
+      <li class="no">It doesn’t include each fund’s specific fees or year-to-year swings, and figures are not adjusted for inflation.</li>
+    </ul>
+
+    <h3>What’s the return on my investment?</h3>
+    <p class="q"><b>SumaCells Return</b></p>
+    <ul>
+      <li><b>Annual return (IRR/XIRR):</b> we work out the average yearly pace using the actual dates of the purchase, the sale and each dividend.</li>
+      <li><b>Comparison:</b> against doing nothing (0%), inflation (2.5%), a money-market fund (3%) and the global stock market (8%). They’re editable references, not promises.</li>
+      <li class="no">It doesn’t include taxes or fees you haven’t already deducted from the amounts.</li>
+    </ul>
+
+    <h3>How much will I have when I retire?</h3>
+    <p class="q"><b>SumaCells Forecast</b></p>
+    <ul>
+      <li><b>Year-by-year projection</b> of your wealth based on what you save or withdraw at each age.</li>
+      <li><b>Assumed return:</b> 6% a year by default (editable).</li>
+      <li><b>Euros of each year:</b> we don’t adjust for inflation. With 2.5% inflation, prices roughly double every 28 years.</li>
+      <li><b>Withdrawals:</b> 3% a year by default, a bit more cautious than the well-known “4% rule”.</li>
+      <li class="no">Past returns don’t guarantee future returns.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Sources</h2>
+    <ul>
+      <li><a href="https://www.boe.es/" rel="noopener" target="_blank">BOE</a> and the <a href="https://sede.agenciatributaria.gob.es/" rel="noopener" target="_blank">Spanish Tax Agency</a>: IRPF Act 35/2006, tax scales and allowances.</li>
+      <li><a href="https://www.seg-social.es/" rel="noopener" target="_blank">Social Security</a>: contribution bases and rates.</li>
+      <li><a href="https://clientebancario.bde.es/" rel="noopener" target="_blank">Bank of Spain · Bank Customer Portal</a>: how mortgages and their payments work.</li>
+      <li><a href="https://www.ine.es/" rel="noopener" target="_blank">INE</a>: consumer price index, to set the reference inflation.</li>
+      <li><a href="https://www.msci.com/" rel="noopener" target="_blank">MSCI</a>: MSCI World index history.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Updates and mistakes</h2>
+    <p>We review the figures when the rules change. The next major review will be in <b>January 2027</b>, with the new income-tax and contribution tables.</p>
+    <p>Spotted a mistake or something unclear? Tell us with the feedback button below or at the end of any calculator. We’ll fix it as soon as we can.</p>
+    <p>SumaCells is not affiliated with any bank or financial institution.</p>
+  </section>
+
+  <a class="back" href="../">← Back to the calculators</a>
+</div>
+</div>
+
+</main>
+
+<div class="wrap" style="margin-top:0">
+  <astro-feedback></astro-feedback>
+</div>
+
+<script>
+  var TITLES = {
+    es: "Cómo calculamos: fuentes y supuestos · SumaCells",
+    ca: "Com calculem: fonts i supòsits · SumaCells",
+    en: "How we calculate: sources and assumptions · SumaCells"
+  };
+  window.setLang = function (l) {
+    if (!TITLES[l]) l = "es";
+    document.documentElement.lang = l;
+    document.title = TITLES[l];
+    document.querySelectorAll("[data-lang]").forEach(function (el) {
+      el.classList.toggle("on", el.getAttribute("data-lang") === l);
+    });
+  };
+</script>
+</body>
+</html>

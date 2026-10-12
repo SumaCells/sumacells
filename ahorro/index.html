@@ -291,10 +291,10 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#eef5fb;color:#1a2030
 </script>
 </head>
 <body>
-<div id="app">
+<div id="app" role="main">
 
   <!-- ====== CABECERA (shared/header.js) ====== -->
-  <astro-header app="ahorro" version="v4.11" brand-action>
+  <astro-header app="ahorro" version="v4.12" brand-action>
     <button slot="action" class="back-btn hidden" id="back-btn" onclick="goBack()">← Volver</button>
   </astro-header>
   <script>
@@ -605,7 +605,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#eef5fb;color:#1a2030
               <tr><td>Hasta 6.000€</td><td>19%</td></tr>
               <tr><td>6.001€ – 50.000€</td><td>21%</td></tr>
               <tr><td>50.001€ – 200.000€</td><td>23%</td></tr>
-              <tr><td>Más de 200.000€</td><td>27%</td></tr>
+              <tr><td>200.001€ – 300.000€</td><td>27%</td></tr>
+              <tr><td>Más de 300.000€</td><td>30%</td></tr>
             </table>
           </div>
         </div>
@@ -1026,10 +1027,12 @@ function updateColchon() {
 }
 
 // ====== OBJ: PISO ======
-// Tramos de IRPF sobre ganancias del ahorro (movables).
+// Tramos de IRPF sobre ganancias del ahorro (base del ahorro, desde 2025 — Ley 7/2024):
+// 19% hasta 6.000 € · 21% hasta 50.000 € · 23% hasta 200.000 € · 27% hasta 300.000 € · 30% más.
+// Cada par es [ancho del tramo, tipo].
 function capitalGainsTax(gains) {
   if (gains <= 0) return 0;
-  const brackets = [[6000, 0.19], [44000, 0.21], [150000, 0.23], [Infinity, 0.27]];
+  const brackets = [[6000, 0.19], [44000, 0.21], [150000, 0.23], [100000, 0.27], [Infinity, 0.30]];
   let tax = 0, remaining = gains;
   for (const [size, rate] of brackets) {
     const slice = Math.min(remaining, size);

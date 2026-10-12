@@ -69,6 +69,7 @@
   .app-row .meta .accent{color:#8a6400;font-weight:700}
   .app-row .chev{color:#9aa6b8;font-size:1.3rem;font-weight:700;flex-shrink:0}
   .foot{text-align:center;color:var(--text-muted);font-size:.8rem;margin:1.4rem 0 0}
+  .foot a{color:var(--primary);font-weight:700}
   @media(min-width:700px){.band{padding:1.9rem 1.5rem 4.5rem}}
 </style>
 
@@ -101,14 +102,14 @@
     <h1 class="hero-title" id="eyebrow">Herramientas financieras fáciles de entender</h1>
   </div>
 </div>
-<div class="wrap">
+<main class="wrap">
   <a class="continue hidden" id="continue" href="#">
     <span class="ct"><small id="contLbl"></small><b id="contTxt"></b></span>
     <span class="cv" id="contVal"></span>
   </a>
   <div id="apps"></div>
   <p class="foot" id="foot"></p>
-</div>
+</main>
 <style>.app-row:focus-visible,.continue:focus-visible{outline:3px solid var(--accent);outline-offset:2px}</style>
 
 <script>
@@ -190,7 +191,7 @@
       q: { nomina: "¿Cuánto cobraré neto al mes?", casa: "¿Qué piso me puedo permitir?", rentabilidad: "¿Cuál es la rentabilidad de mi inversión?", forecast: "¿Cuánto tendré cuando me jubile?", ahorro: "Empieza a invertir, paso a paso" },
       meta: { nomina: "1 dato", casa: "2 datos", rentabilidad: "4 datos", forecast: "3 datos", ahorro: "6 pasos" },
       sec: { calc: "Calculadoras", learn: "Guías" },
-      cont: "Continúa donde lo dejaste", foot: "Herramientas orientativas, no asesoramiento financiero."
+      cont: "Continúa donde lo dejaste", foot: "Herramientas orientativas, no asesoramiento financiero.", how: "Cómo calculamos"
     },
     ca: {
       title: "SumaCells · La teva suite de calculadores",
@@ -198,7 +199,7 @@
       q: { nomina: "Quant cobraré net cada mes?", casa: "Quin pis em puc permetre?", rentabilidad: "Quina és la rendibilitat de la meva inversió?", forecast: "Quant tindré quan em jubili?", ahorro: "Comença a invertir, pas a pas" },
       meta: { nomina: "1 dada", casa: "2 dades", rentabilidad: "4 dades", forecast: "3 dades", ahorro: "6 passos" },
       sec: { calc: "Calculadores", learn: "Guies" },
-      cont: "Continua on ho vas deixar", foot: "Eines orientatives, no assessorament financer."
+      cont: "Continua on ho vas deixar", foot: "Eines orientatives, no assessorament financer.", how: "Com calculem"
     },
     en: {
       title: "SumaCells · Your suite of calculators",
@@ -206,7 +207,7 @@
       q: { nomina: "How much will I take home each month?", casa: "What home can I afford?", rentabilidad: "What's the return on my investment?", forecast: "How much will I have when I retire?", ahorro: "Start investing, step by step" },
       meta: { nomina: "1 input", casa: "2 inputs", rentabilidad: "4 inputs", forecast: "3 inputs", ahorro: "6 steps" },
       sec: { calc: "Calculators", learn: "Guides" },
-      cont: "Pick up where you left off", foot: "Guidance tools, not financial advice."
+      cont: "Pick up where you left off", foot: "Guidance tools, not financial advice.", how: "How we calculate"
     }
   };
 
@@ -254,7 +255,7 @@
     var t = T[l] || T.es;
     document.title = t.title;
     document.getElementById("eyebrow").textContent = t.eyebrow;
-    document.getElementById("foot").textContent = t.foot;
+    document.getElementById("foot").innerHTML = t.foot + ' · <a href="como-calculamos/">' + t.how + '</a>';
 
     var byId = {}; cfg.apps.forEach(function (a) { byId[a.id] = a; });
     renderContinue(t, byId);
